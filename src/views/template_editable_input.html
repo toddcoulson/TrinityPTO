@@ -1,0 +1,46 @@
+
+<div>
+  <div ng-show="!editing && !currencyOn">
+    <span class="fss-sort-click" ng-click="edit()">{{value}}</span>
+    <button ng-show="value.length==0 || !value" ng-click="edit()" class="btn btn-
+primary fss-submission">Edit</button>
+  </div>
+  <div ng-show="!editing && currencyOn">
+    <span class="fss-sort-click" ng-click="edit()">{{value | currency}}</span>
+    <button ng-show="value.length==0 || !value" ng-click="edit()" class="btn btn-
+primary fss-submission">Edit</button>
+  </div>
+  <div ng-show="editing">
+    <!--input-onblur is a directive I got from this source
+    stackoverflow.com/questions/14722577/how-to-let-ng-model-not-update-immediately
+    basically gives me ng-model-options="{ updateOn: 'blur' }"  capability (only
+available in angular 1.3).
+    I did not want the model to update my input box on every change of text. Only on
+blur. -->
+    <form ng-submit="submit()">
+      <div class="input-group" ng-show="editing" >
+        <div ng-show="inputtype == 'text' || !inputtype">
+          <input input-onblur name="input_name" type="text"
+            ng-model="value" class="form-control"/>
+        </div>
+        <div ng-show="inputtype == 'number'">
+          <input input-onblur name="input_number" type="number"
+            min={{minValue}} max={{maxValue}} ng-model="value" class="form-control fss-
+input-inline fss-float-element-left"/>
+        </div>
+        <div class="fss-input-inline fss-float-element-left" ng-show="inputtype ==
+'textarea'">
+<textarea class="form-control"
+ng-model="value" class="form-control">
+          </textarea>
+</div>
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit" ><span class="glyphicon
+glyphicon-ok" aria-hidden="true"></span></button>
+          <button class="btn btn-default" type="button" ng-click="cancel()"><span
+class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<div class="card_holder">
+    <div class="card">
+        <div class="card-block">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <a href="" class="pull-right" ng-click="editColor()"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Name:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.name}}</p>
+                </div>
+                <div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                    <input class="form-control" type="text" ng-model="cardobj.name" value="{{cardobj.name}}" id="example-text-input">
+                </div>
+            </div>
+
+            <!--<div class="row">
+
+<div class="col-sm-6">
+<p class="card-text textLabelCard">Group:</p>
+</div>
+
+<div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+<p class="card-text textValueCard pull-right">{{cardobj.group}}</p>
+</div>
+<div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+<select class="custom-select" ng-model="cardobj.group">
+<option value="fullTimeEmployees">Full Time Employees</option>
+<option value="partTimeEmployees">Part Time Employees</option>
+<option value="specialStaff">Special Staff</option>
+</select>
+</div>
+</div>
+<div class="row">
+
+<div class="col-sm-6">
+<p class="card-text textLabelCard">Rule:</p>
+</div>
+
+<div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+<p class="card-text textValueCard pull-right">{{cardobj.employeeRole}}</p>
+</div>
+<div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+<input class="form-control" type="text" ng-model="cardobj.employeeRole" value="{{cardobj.employeeRole}}" id="example-text-input">
+</div>
+</div>-->
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Employee Start Date:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.employeeStartDate | date:'yyyy-MMM-dd'}}</p>
+                </div>
+                <div class="col-sm-6 input-group" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+
+                    <input type="text" class="form-control" uib-datepicker-popup="dd-MMM-yyyy" ng-model="cardobj.employeeStartDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-click="open($event)" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Carryover hours last year:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.carryoverHours}}</p>
+                </div>
+                <div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                    <div class="input-group">
+                        <input class="form-control" type="number" min="0" ng-model="cardobj.carryoverHours" value="{{cardobj.carryoverHours}}" id="example-text-input">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Allocated Hours this year:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.allocatedHoursYear}}</p>
+                </div>
+                <div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                    <input class="form-control" type="number" min="0" ng-model="cardobj.allocatedHoursYear" value="{{cardobj.allocatedHoursYear}}" id="example-text-input">
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Remaining Hours:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.remainingHours}}</p>
+                </div>
+                <div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                    <input class="form-control" type="number" min="0" ng-model="cardobj.remainingHours" value="{{cardobj.remainingHours}}" id="example-text-input">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

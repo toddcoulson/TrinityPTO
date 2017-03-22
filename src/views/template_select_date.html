@@ -1,0 +1,35 @@
+<div>
+    <div class="input-group ui-datepicker fss-datepicker fss-float-element-left fss-
+                input-date-group" ng-show="editing">
+        <div class="datepicker-div">
+            <input name="date" type="text" class="form-control fss-input-inline" ng-
+                   model="value"
+                   datepicker-popup="{{$parent.dateFormat}}"
+                   is-open="opened"
+                   ng-click="open($event)"
+                   datepicker-options="{{$parent.gcs.dateOptions}}"
+                   close-text="Close"
+                   max="max"
+                   min="min"></input>
+        <span class="input-group-btn">
+            <button class="btn btn-default" href="" ng-click="open()">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </button>
+        </span>
+    </div>
+</div>
+<div ng-show="editing" class="fss-float-element-left">
+    <span  ng-click="submit()"><span class="glyphicon glyphicon-ok" aria-
+                                     hidden="true"></span>
+                                     </span>
+    <span ng-click="cancel()"><span class="glyphicon glyphicon-ban-circle" aria-
+                                    hidden="true"></span>
+                                    </span>
+</div>
+<!--<input type="date" class="form-control"
+ng-model="phase.phase_status_date"/>-->
+<div ng-show="!editing">
+    <span ng-click="edit()" class="fss-sort-click">{{value | date:dateFormat}}</span>
+    <button ng-show="value.length==0 || !value" ng-click="edit()" class="btn btn-
+                                                                         default">Edit</button>
+</div>

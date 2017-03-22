@@ -1,0 +1,247 @@
+$bkGrey: #ECECEC; 
+$bkGreen: #E2FBC9; 
+$bkBlue: #CEECEE; 
+$darkBlue: #004371; 
+$wt: #FFF;
+$bk: #000;
+$bkRoll: #36454F;
+$darkRed: #BF0000; 
+$darkGreen: #417505;
+$ltGreen: #75BA42;
+$grey1: #7B7B7B;
+$grey2: #5C5C5C;
+
+
+$headlineFt: 'Oswald', sans-serif;
+$subFt: 'Quattrocento', serif;
+body{
+  font-family: $subFt;
+  background-color: $bkGrey;
+}
+.header{
+  background-color: $bkGreen;
+}
+.info{
+  background-color: $bkBlue;
+}
+.body{
+  background-color: $bkGreen;
+}
+.secondBody{
+  background-color: $bkGreen;
+}
+
+.sectionHeaderTitle{
+  font-family:$headlineFt;
+  margin:0px;
+  padding:0px;
+}
+
+.sectionTable{
+  padding:10px 20px;
+}
+
+.card {
+  font-size:10px;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  background-color: #f1f1f1;
+  margin:0 20px;
+  border-radius: 10px;
+  max-width:400px;
+  min-width:250px;
+}
+
+.card-block {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+
+.card-title {
+  font-family: $headlineFt;
+  margin-bottom: 0.75rem;
+}
+
+.card-subtitle {
+  margin-top: -0.375rem;
+  margin-bottom: 0;
+}
+
+.card-header {
+  font-family: $headlineFt;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.card-header:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.card-footer {
+  padding: 0.75rem 1.25rem;
+  background-color: #f7f7f9;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  &:last-child{
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+.card-header-tabs {
+  margin-right: -0.625rem;
+  margin-bottom: -0.75rem;
+  margin-left: -0.625rem;
+  border-bottom: 0;
+}
+
+.card-header-pills {
+  margin-right: -0.625rem;
+  margin-left: -0.625rem;
+}
+
+.card > .list-group:first-child .list-group-item:first-child {
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
+
+.card > .list-group:last-child .list-group-item:last-child {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.card-block {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+
+
+
+.card-text {
+  color: $darkBlue;
+  &:last-child{
+    margin-bottom: 0;
+  }
+}
+
+.timeStateLabel{
+  margin-right: 5px;
+}
+
+.commonIconBtn{
+  color:#000;
+  &:hover{
+    color:$darkGreen;
+  }
+}
+
+.headerLogo{
+
+  /*-webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.5));
+  filter: url(#drop-shadow);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";
+  filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=12, OffY=12, Color='#444')";*/
+}
+
+
+
+.navbar-inverse {
+  color: $bk;
+  .navbar-nav > .active > a {
+    background: $bkGreen;
+    color: $bk;
+    &:hover{
+      background: $bkBlue;
+      color: $bk;
+    }
+    &:focus{
+      background: $bkGreen;
+      color: $bk;
+    }
+  }
+}
+.navbar-inverse .navbar-nav>li>a{
+  background: $bkGreen;
+  color: $bk;
+  &:hover{
+    background: $bkBlue;
+    color: $bkRoll;
+  }
+}
+.navbar-inverse .navbar-nav > .open > a {
+  background: $bkGreen;
+  color: $bk;
+  &:hover{
+    background: $bkBlue;
+    color: $bk;
+  }
+  &:focus{
+    background: $bkGreen;
+    color: $bk;
+  }
+}
+
+
+.navbar-inverse .navbar-nav .open .dropdown-menu {
+  background-color: $bkGreen;
+  color: $bk;
+}
+.navbar{
+  border-radius: 0px;
+  margin: 0px;
+  background-color: $bkGreen;
+  border: 0px;
+  border-top: 2px solid $wt;
+}
+.navbar-inverse .navbar-toggle{
+  background-color: $bkGreen;
+  &:hover{
+    background-color: $bkBlue;
+  }
+  &:focus{
+    background-color: $bkGreen;
+  }
+  .icon-bar{
+    background-color:$bk;
+  }
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+  border-top: 1px solid $wt;
+}
+
+.navbar-inverse .navbar-nav>.active{
+  
+  a{
+    background-color: $bkBlue !important;
+  }
+}
+
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover{
+  color: $bk;
+}
+
+.chosenColor{
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+}
+/*
+cardTimeType
+textLabelCard
+textValueCard
+comment*/

@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="cardTimeType">Paid Time Off</h2> 
+        <span class="label label-warning">Pending</span>
+        <span class="btn btn-default" ng-click="close()" ng-
+              show="useModal">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </span>
+    </div>
+    <div class="card-block">
+
+        <p class="card-text textLabelCard">Time Type:</p>
+        <p class="card-text textValueCard">{{cardobj.timeType}}</p>
+        <p class="card-text textValueCard">{{cardobj.employeeName}}</p>
+        <p class="card-text textLabelCard">Start:</p>
+        <p class="card-text textValueCard">{{cardobj.startDateTime}}</p>
+        <p class="card-text textLabelCard">End:</p>
+        <p class="card-text textValueCard">{{cardobj.endDateTime}}</p>
+        <p class="card-text textValueCard">Awaiting Approval</p>
+        <p class="card-text textValueCard comment">{{cardobj.message}}</p>
+    </div>
+</div>
+
+
+
+

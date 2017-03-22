@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ptoApp">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TrinityIT Time Off Tracking</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,700" >
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quattrocento:400,700">
+        <link rel="stylesheet" href="../bower_components/tether/dist/css/tether.min.css">
+        <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../bower_components/angular-ui/build/angular-ui.min.css">
+        <link rel="stylesheet" href="../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+        <link rel="stylesheet" href="../bower_components/angular-bootstrap/ui-bootstrap-csp.css">
+        <link rel="stylesheet" href="../bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" />
+        <link rel="stylesheet" href="../bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css" />
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="container" ng-controller="ContainerController">
+            <div class="header" ui-view="header"></div>
+            <div class="info" ui-view="info"></div>
+            <div class="body" ui-view="body"></div>
+            <div class="secondBody" ui-view="secondBody" ng-show="!($state.includes('app.admin'))"></div>
+        </div>
+        
+        <!-- build:js scripts/main.js -->
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script type="text/javascript" src="https://sdk.amazonaws.com/js/aws-sdk-2.13.0.min.js"></script>
+        <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+        
+        <script type="text/javascript" src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="../bower_components/angular-ui/build/angular-ui.js"></script>
+        <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.min.js"></script>
+        <script type="text/javascript" src="../bower_components/tether/dist/js/tether.min.js"></script>
+        <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        
+        <script type="text/javascript" src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="../bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+        <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script type="text/javascript" src="../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
+        <script src="js/app.min.js"></script>
+        <!-- endbuild -->
+    </body>
+</html>

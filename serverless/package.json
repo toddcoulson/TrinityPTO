@@ -1,0 +1,10 @@
+{
+  "name": "pto-rest",
+  "version": "1.0.0",
+  "description": "Serverless CRUD service exposing a REST HTTP interface for PTO project",
+  "author": "Todd Coulson",
+  "license": "MIT",
+  "dependencies": {
+    "uuid": "^2.0.3"
+  }
+}

@@ -1,0 +1,54 @@
+
+Employee:
+{
+"employeeid": "another@gmail.com",
+      "firstName": "Todd",
+      "lastName": "Coulson",
+      "employeeType": "full-time",
+      "requests": [],
+      "totalHoursAllocated": 40,
+      "totalTimeAccrued": 40
+}
+
+Employee Type:
+{
+"employeeType":"admin"
+}
+
+Request:
+{
+"requestedBy": "Todd",
+        "approvedBy": "Tom",
+        "status": "approved",
+        "startDateTime": "3/25/2017",
+        "endDateTime": "3/29/2017",
+        "duration": "32",
+        "message": "I need a vaca",
+        "approverMessage": "Take one!",
+        "locked": "false",
+        "timeState":"multiple days",
+        "timeStateColor":"#FF0000",
+        "timeOffGroup":"paid time off",
+        "timeOffGroupColor": "#FFFF00"
+}
+
+Time Off Group:
+{
+"timeOffGroup":"Paid Time Off",
+"timeOffGroupColor":"#00FFF0"
+}
+
+Time Type:
+{
+"timeType":"Multiple Days"
+}
+
+Time State:
+{
+"timeState":"Approved",
+"timeStateColor":"#BADA55"
+}
+
+
+
+"":""

@@ -1,0 +1,97 @@
+
+service: employeeTypeTest
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource: "*"
+      Action:
+        - "dynamodb:*"
+
+functions:
+  createEmployeeType:
+    handler: employeetype.create
+    events:
+      - http:
+          path: employeetype
+          method: post
+          cors: true
+
+  listEmployeeType:
+    handler: employeetype.list
+    events:
+      - http:
+          path: employeetype
+          method: get
+          cors: true
+
+  getEmployeeType:
+    handler: employeetype.get
+    events:
+      - http:
+          path: employeetype/{employeetypeid}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                employeetypeid: true
+  updateEmployeeType:
+    handler: employeetype.update
+    events:
+      - http:
+          path: employeetype/{employeetypeid}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                employeetypeid: true
+  deleteEmployeeType:
+    handler: employeetype.delete
+    events:
+      - http:
+          path: employeetype/{employeetypeid}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                employeetypeid: true
+
+resources:  
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: EmployeeTypeTable
+        AttributeDefinitions:
+          - AttributeName: employeetypeid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: employeetypeid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    DynamoDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: DynamoDbTable
+      Properties:
+        PolicyName: lambda-dynamodb
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+                - dynamodb:Scan
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+              Resource: arn:aws:dynamodb:*:*:table/EmployeeTypeTable
+        Roles:
+          - Ref: IamRoleLambdaExecution

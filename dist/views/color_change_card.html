@@ -1,0 +1,37 @@
+<div class="card_holder">
+    <div class="card">
+
+        <div class="card-block">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <a href="" class="pull-right" ng-click="editColor()"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">{{cardtitle}}:</p>
+                </div>
+
+                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'new'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.entityValue}}</p>
+                </div>
+                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'new'">
+                    <input class="form-control" type="text" ng-model="cardobj.entityValue" value="{{cardobj.entityValue}}" id="example-text-input">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="card-text textLabelCard">Color Chip:</p>
+                </div>
+                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'new'">
+                    <div class="chosenColor" ng-style="{'background-color':cardobj.entityColor}"></div>
+                </div>
+                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'new'">
+                    <button class="btn btn-default" colorpicker="hex" ng-style="{'background-color':cardobj.entityColor}" type="button" colorpicker-position="top" ng-model="cardobj.entityColor">Change Color</button>
+                </div>
+            </div>
+        </div>
+    </div>

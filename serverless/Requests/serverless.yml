@@ -1,0 +1,101 @@
+
+
+service: requests
+
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource: "*"
+      Action:
+        - "dynamodb:*"
+
+
+functions:
+  createRequest:
+    handler: request.create
+    events:
+      - http:
+          path: request
+          method: post
+          cors: true
+
+  listRequest:
+    handler: request.list
+    events:
+      - http:
+          path: request
+          method: get
+          cors: true
+
+  getRequest:
+    handler: request.get
+    events:
+      - http:
+          path: request/{requestid}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                requestid: true
+  updateRequest:
+    handler: request.update
+    events:
+      - http:
+          path: request/{requestid}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                requestid: true
+  deleteRequest:
+    handler: request.delete
+    events:
+      - http:
+          path: request/{requestid}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                requestid: true
+
+resources:  
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        
+        TableName: Request
+        AttributeDefinitions:
+          - AttributeName: requestid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: requestid
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    DynamoDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: DynamoDbTable
+      Properties:
+        PolicyName: lambda-dynamodb
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+                - dynamodb:Scan
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+              Resource: arn:aws:dynamodb:*:*:table/Request
+        Roles:
+          - Ref: IamRoleLambdaExecution

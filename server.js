@@ -13,15 +13,15 @@ var flash = require("connect-flash");
 
 /*var configDB = require('./config/database.js');*/
 
-var dynamodbLocal = require("dynamodb-localhost");
-dynamodbLocal.install(); /* This is one time operation. Safe to execute multiple times which installs DynamoDB once. All the other methods depends on this. */
-dynamodbLocal.start({port: 8080});
+//var dynamodbLocal = require("dynamodb-localhost");
+//dynamodbLocal.install(); /* This is one time operation. Safe to execute multiple times which installs DynamoDB once. All the other methods depends on this. */
+/*dynamodbLocal.start({port: 8080});
 
 var AWS = require('aws-sdk');
 var config = {"endpoint":"http://localhost:8080"};
 var client = new AWS.DynamoDB(config);
 var s3client = new AWS.S3(config);
-
+*/
 app.use(express.static('static'));
 var google = require('googleapis');
 var plus = google.plus('v1');
@@ -90,7 +90,8 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.use('./config/auth',  express.static(__dirname + './config/auth'));
 app.use('/app',  express.static(__dirname + '/app'));
 app.set('views', __dirname + '/dist/views');
-app.set('view engine', 'jade');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 require('./config/passport')(passport);
 app.use(morgan('dev'));

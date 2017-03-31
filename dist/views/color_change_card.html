@@ -5,6 +5,7 @@
             <div class="row">
 
                 <div class="col-sm-12">
+                   <a href="" class="pull-right" ng-click="delete()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                     <a href="" class="pull-right" ng-click="editColor()"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </div>
             </div>
@@ -14,10 +15,10 @@
                     <p class="card-text textLabelCard">{{cardtitle}}:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'new'">
+                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.entityValue}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'new'">
+                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <input class="form-control" type="text" ng-model="cardobj.entityValue" value="{{cardobj.entityValue}}" id="example-text-input">
                 </div>
             </div>
@@ -26,11 +27,16 @@
                 <div class="col-sm-6">
                     <p class="card-text textLabelCard">Color Chip:</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'new'">
+                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <div class="chosenColor" ng-style="{'background-color':cardobj.entityColor}"></div>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'new'">
+                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <button class="btn btn-default" colorpicker="hex" ng-style="{'background-color':cardobj.entityColor}" type="button" colorpicker-position="top" ng-model="cardobj.entityColor">Change Color</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <a href="" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'" class="pull-right" ng-click="submit"><i class="fa fa-check" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>

@@ -3,10 +3,11 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
         restrict:"E",
         scope: {
             cardobj: '=fcardobj',
-            settings: '=fsettings'
+            updatedb: '&update',
+            deletedb: '&delete',
+            adddb: '&add'
         },
         controller: ['$scope','$element', '$attrs', '$location', '$injector', function ($scope, $element, $attrs, $location, $injector) {
-            console.log($scope.cardobj.timeOffGroup);
             $scope.dt = new Date();
             $scope.today = function() {
                 $scope.dt = new Date();
@@ -61,12 +62,6 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
             $scope.format = $scope.formats[0];
             $scope.altInputFormats = ['M!/d!/yyyy'];
-
-            /*$scope.settings = {
-                cardType: 'view', //edit, view
-                timeType: 'daily', //hourly, multiple, daily, editNew, edit
-                timeState: 'pending'//approved, denied
-            }*/
 
             $scope.popup1 = {
                 opened: false

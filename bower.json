@@ -22,6 +22,7 @@
     "bootstrap-sass": "^3.3.7",
     "angular-ui-router": "^0.4.2",
     "eonasdan-bootstrap-datetimepicker": "^4.17.45",
-    "angular-bootstrap-colorpicker": "^3.0.25"
+    "angular-bootstrap-colorpicker": "^3.0.25",
+    "angular-google-plus": "^0.1.3"
   }
 }

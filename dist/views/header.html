@@ -13,11 +13,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-class="{active: stateis('app.employee')}"><a ui-sref="app.employee">
+                <li ng-show="employeeType=='full-time' || employeeType=='approver' || employeeType=='admin'" ng-class="{active: stateis('app.employee')}"><a ui-sref="app.employee">
                     <span class="glyphicon glyphicon-home" aria-hidden="true"></span> My Time</a></li>
-                <li ng-class="{active: stateis('app.approver')}"><a ui-sref="app.approver">
+                <li ng-show="employeeType=='approver' || employeeType=='admin'" ng-class="{active: stateis('app.approver')}"><a ui-sref="app.approver">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Approver</a></li>
-                <li ng-class="{active: stateincludes('app.admin')}"><a ui-sref="app.admin">
+                <li ng-show=" employeeType=='admin'" ng-class="{active: stateincludes('app.admin')}"><a ui-sref="app.admin">
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Admin</a></li>
             </ul>
         </div>

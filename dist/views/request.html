@@ -12,5 +12,8 @@
             </a>
         </div>
     </div>
-    <card-view fcardobj="testData" fsettings="testSetting"></card-view>
+    <div ng-repeat="req in requests track by $index" >
+        <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
+    </div>
 </div>
+

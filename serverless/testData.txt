@@ -26,10 +26,9 @@ Request:
         "message": "I need a vaca",
         "approverMessage": "Take one!",
         "locked": "false",
-        "timeState":"multiple days",
-        "timeStateColor":"#FF0000",
-        "timeOffGroup":"paid time off",
-        "timeOffGroupColor": "#FFFF00"
+        "timeState":"approved",
+        "timeType":"multiple days",
+        "timeOffGroup":"paid time off"
 }
 
 Time Off Group:
@@ -40,8 +39,9 @@ Time Off Group:
 
 Time Type:
 {
-"timeType":"Multiple Days"
+"timeType":"multiple days"
 }
+//single day, multiple days, hourly
 
 Time State:
 {

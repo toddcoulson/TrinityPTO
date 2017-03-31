@@ -4,10 +4,22 @@ angular.module('ptoApp').directive('colorChangeCard', ["$filter", function ($fil
         scope: {
             cardtitle: '@',
             cardobj: '=',
-            updatedb: '&update'
+            updatedb: '&update',
+            deletedb: '&delete',
+            adddb: '&add'
         },
         controller: ['$scope','$element', '$attrs', '$location', '$injector', function ($scope, $element, $attrs, $location, $injector) {
             $scope.colorChange={color:"#FFF"};
+            $scope.delete = function(){
+                $scope.deletedb({value: $scope.cardobj.id});
+            }
+            $scope.submit=function(){
+                if($scope.cardobj.cardState === 'edit'){
+                    $scope.updatedb({value: $scope.cardobj});
+                } else if($scope.cardobj.cardState === 'add'){
+                    $scope.adddb({value: $scope.cardobj});
+                }
+            }
             $scope.editColor = function(){
                 $scope.cardobj.cardState === 'edit' ? $scope.cardobj.cardState = 'view': $scope.cardobj.cardState = 'edit';
                 if($scope.cardobj.cardState === 'view'){
@@ -21,6 +33,5 @@ angular.module('ptoApp').directive('colorChangeCard', ["$filter", function ($fil
 }]);
 
 $(function() {
-    console.log("getting color picker");
         $('#cp2').colorpicker();
     });

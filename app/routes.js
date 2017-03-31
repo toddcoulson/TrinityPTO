@@ -1,5 +1,7 @@
 var User = require("./models/user");
-
+var express = require('express');
+var app = express();
+var path = require('path');
 module.exports = function(app, passport){
     app.get('/', function(req, res){
     });
@@ -22,8 +24,8 @@ module.exports = function(app, passport){
 
     app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/profile', failureRedirect: '/'}));*/
 
-    app.get('/oauthcallback', function(req, res){
-        res.render("./dist/views/profile.html");
+    app.get('/oauthcall', function(req, res){
+        res.render("profile");
     });
     
     

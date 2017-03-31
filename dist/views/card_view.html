@@ -1,20 +1,20 @@
 <div class="card_holder">
     <div class="card">
-        <div class="card-header">
-            <span class="cardTimeType" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">{{cardobj.timeOffGroup | capitalizeTitle}}</span> 
-            <select class="custom-select" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+        <div class="card-header" ng-style="{'background-color':cardobj.timeOffGroupColor}">
+            <span class="cardTimeType" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">{{cardobj.timeOffGroup | capitalizeTitle}}</span> 
+            <select class="custom-select" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                 <option selected>Time Off Group</option>
                 <option value="1">Paid Time off</option>
                 <option value="2">Vacation</option>
                 <option value="3">Holiday</option>
             </select>
             <span class="pull-right">
-                <span ng-show="settings.cardType === 'review'">
+                <span ng-show="cardobj.cardState === 'review'">
                     <button type="button" class="btn btn-success">Approve</button>
                     <button type="button" class="btn btn-danger">Deny</button>
                 </span>
-                <span class="label label-warning timeStateLabel">{{settings.timeStatus | capitalizeTitle}}</span>
-                <a href="#" type="submit" class="commonIconBtn" ng-click="close()" ng-show="settings.timeState === 'pending'">
+                <span  ng-style="{'background-color':cardobj.timeStateColor}" class="label label-warning timeStateLabel">{{cardobj.timeState | capitalizeTitle}}</span>
+                <a href="#" type="submit" class="commonIconBtn" ng-click="close()" ng-show="cardobj.timeState === 'pending'">
                     <i class="fa fa-times" aria-hidden="true" ></i>
                 </a>
             </span>
@@ -26,8 +26,8 @@
                     <p class="card-text textLabelCard">Time Type:</p>
                 </div>
                 <div class="col-sm-3" >
-                    <p class="card-text textValueCard" ng-show="settings.cardType === 'view'">{{settings.timeType}}</p>
-                    <select class="custom-select" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                    <span class="card-text textValueCard" ng-show="cardobj.cardState === 'view'">{{cardobj.timeType}}</span>
+                    <select class="custom-select" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                         <option selected>Time Type</option>
                         <option value="1">Hourly</option>
                         <option value="2">Single Day</option>
@@ -35,47 +35,46 @@
                     </select>
 
                 </div>
-                <div class="col-sm-6" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
-                    <p class="card-text textValueCard pull-right">{{cardobj.employeeName}}</p>
+                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.requestedBy}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <input class="form-control" type="text" value="{{cardobj.employeeName}}" id="example-text-input">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-3">
-                    <p class="card-text textLabelCard" ng-show="settings.timeType === 'multiple'">Start:</p>
-                    <p class="card-text textLabelCard" ng-show="settings.timeType !== 'multiple'">Date:</p>
+                    <span class="card-text textLabelCard" ng-show="cardobj.timeState === 'multiple days'">Start:</span>
+                    <span class="card-text textLabelCard" ng-show="cardobj.timeState !== 'multiple days'">Date:</span>
                 </div>
-                <div class="col-sm-3" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
-                    <p class="card-text textValueCard">{{cardobj.dateTime}}</p>
+                <div class="col-sm-3" ng-show="cardobj.cardState !== 'edit' || cardobj.cardState !== 'add'">
+                    <span class="card-text textValueCard">{{cardobj.startDateTime}}</span>
                 </div>
-                <div class="col-sm-3 input-group" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                <div class="col-sm-3 input-group" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-click="open($event)" />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-
                 </div>
                 <div class="col-sm-6">
-                    <p class="card-text textValueCard pull-right">{{cardObj.approverName}}</p>
+                    <p class="card-text textValueCard pull-right">{{cardobj.approvedBy}}</p>
                 </div>
             </div>
 
 
-            <div class="row" ng-show="settings.timeType === 'multiple'">
+            <div class="row" ng-show="cardobj.timeState === 'multiple days'">
                 <div class="col-sm-3">
-                    <p class="card-text textLabelCard" >End:</p> 
+                    <span class="card-text textLabelCard" >End:</span> 
                 </div>
                 <div class="col-sm-3">
-                    <p class="card-text textValueCard">{{cardobj.endDateTime}}</p>
+                    <span class="card-text textValueCard">{{cardobj.endDateTime}}</span>
                 </div>
             </div>
 
 
 
-            <div class="row" ng-show="settings.timeType === 'hourly'">
+            <div class="row" ng-show="cardobj.timeState === 'hourly'">
                 <div class="col-sm-3">
                     <p class="card-text textLabelCard">Start Time:</p>
                 </div>
@@ -94,10 +93,10 @@
 
 
             <div class="row"  ng-show="cardobj.message">
-                <div class="col-sm-12" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                <div class="col-sm-12" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard comment">{{cardobj.message}}</p>
                 </div>
-                <div class="col-sm-12 form-group" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                <div class="col-sm-12 form-group" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <textarea class="form-control" id="messageEdit" rows="3">{{cardobj.message}}</textarea>
                 </div>
             </div>
@@ -106,15 +105,15 @@
                     <p class="card-text textValueCard">Approver Message:</p>
                 </div>
 
-                <div class="col-sm-12" ng-show="settings.cardType !== 'edit' && settings.cardType !== 'new'">
+                <div class="col-sm-12" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard comment">{{cardobj.approverMessage}}</p>
                 </div>
-                <div class="col-sm-12 form-group" ng-show="settings.cardType === 'edit' || settings.cardType === 'new'">
+                <div class="col-sm-12 form-group" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <textarea class="form-control" id="approverMessageEdit" rows="3">{{cardobj.approverMessage}}</textarea>
                 </div>
             </div>
         </div>
-        <p class="input-group" ng-show="settings.cardType === 'edit'">
+        <p class="input-group" ng-show="cardobj.cardState === 'edit'">
 
         </p>
     </div>

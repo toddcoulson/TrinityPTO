@@ -3,11 +3,21 @@ angular.module('ptoApp').directive('userCard', ["$filter", function ($filter) {
         restrict:"E",
         scope: {
             cardobj: '=cardobj',
-            settings: '=settings'
+            updatedb: '&update',
+            deletedb: '&delete',
+            adddb: '&add'
         },
         controller: ['$scope','$element', '$attrs', '$location', '$injector', function ($scope, $element, $attrs, $location, $injector) {
-            $scope.editColor = function(){
-                $scope.settings.cardType === 'edit' ? $scope.settings.cardType = 'view': $scope.settings.cardType = 'edit';
+            $scope.edit = function(){
+                $scope.cardobj.cardState === 'edit' ? $scope.cardobj.cardState = 'view': $scope.cardobj.cardState = 'edit';
+                
+                if($scope.cardobj.cardState === 'view'){
+                    $scope.updatedb({value: $scope.cardobj});
+                }
+            }
+            
+            $scope.delete = function(){
+                $scope.deletedb({value: $scope.cardobj.employeeid});
             }
             
             $scope.cardobj.employeeStartDate = new Date($scope.cardobj.employeeStartDate);
@@ -53,8 +63,8 @@ angular.module('ptoApp').directive('userCard', ["$filter", function ($filter) {
             $scope.format = $scope.formats[0];
             $scope.altInputFormats = ['M!/d!/yyyy'];
 
-            /*$scope.settings = {
-                cardType: 'view', //edit, view
+            /*$scope.cardobj = {
+                cardState: 'view', //edit, view, add
                 timeType: 'daily', //hourly, multiple, daily, editNew, edit
                 timeState: 'pending'//approved, denied
             }*/

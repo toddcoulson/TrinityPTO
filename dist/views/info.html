@@ -9,10 +9,10 @@
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <p class="card-text textLabelCard">Todd Coulson</p>
+        <p class="card-text textLabelCard">{{loggedIn.firstName}} {{loggedIn.lastName}}</p>
     </div>
     <div class="col-sm-6">
-        <p class="card-text textValueCard pull-right">15.5 hrs / 24 hrs</p>
+        <p class="card-text textValueCard pull-right">{{loggedIn.totalTimeUsed}} hrs / {{loggedIn.totalTimeAccrued}} hrs</p>
     </div>
 
 </div>
@@ -20,16 +20,12 @@
 
 
     <div class="col-sm-6">
-        <p class="card-text textLabelCard">Full Time</p>
+        <p class="card-text textLabelCard">{{loggedIn.employeeType}}</p>
     </div>
     <div class="col-sm-6">
-        <p class="card-text textValueCard pull-right">Employee</p>
+        <p class="card-text textValueCard pull-right">{{loggedIn.employeeid}}</p>
     </div>
 
 </div>
-<div class="row">
-    <div class="col-sm-12">
-        <p class="card-text textValueCard text-center">Full Time Group</p>
-    </div>
-</div>
+
 </div>

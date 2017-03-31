@@ -26,23 +26,28 @@
         </div>
         
         <!-- build:js scripts/main.js -->
-        <script src="https://apis.google.com/js/api.js"></script>
         <script type="text/javascript" src="https://sdk.amazonaws.com/js/aws-sdk-2.13.0.min.js"></script>
         <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
         <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
-        
+
+        <script type="text/javascript" src="../bower_components/angular-google-plus/dist/angular-google-plus.js"></script>
+        <script id="googleScript" type="text/javascript" src="https://apis.google.com/js/client.js?onload=init" async="true"></script>
         <script type="text/javascript" src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script type="text/javascript" src="../bower_components/angular-ui/build/angular-ui.js"></script>
         <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.min.js"></script>
         <script type="text/javascript" src="../bower_components/tether/dist/js/tether.min.js"></script>
         <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        
         <script type="text/javascript" src="../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
         <script type="text/javascript" src="../bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
         <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
         <script type="text/javascript" src="../bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js"></script>
         <script src="js/app.min.js"></script>
         <!-- endbuild -->
+        <script>
+            var init = function() {
+                window.initGapi();
+            }
+        </script>
     </body>
 </html>

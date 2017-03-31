@@ -41,6 +41,28 @@ functions:
             parameters:
               paths:
                 requestid: true
+  getEmployeeRequests:
+    handler: request.getEmployeeRequests
+    events:
+      - http:
+          path: request/employee/{employeeid}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                employeeid: true
+  getApproverRequests:
+    handler: request.getApproverRequests
+    events:
+      - http:
+          path: request/approver/{employeeid}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                employeeid: true
   updateRequest:
     handler: request.update
     events:
@@ -69,14 +91,40 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        
         TableName: Request
         AttributeDefinitions:
           - AttributeName: requestid
             AttributeType: S
+          - AttributeName: requestedBy
+            AttributeType: S
+          - AttributeName: approvedBy
+            AttributeType: S
         KeySchema:
           - AttributeName: requestid
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: "EmployeeRequests"
+            KeySchema:
+              - AttributeName: requestedBy
+                KeyType: HASH
+              - AttributeName: requestid
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: "ApproverRequests"
+            KeySchema:
+              - AttributeName: approvedBy
+                KeyType: HASH
+              - AttributeName: requestid
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5

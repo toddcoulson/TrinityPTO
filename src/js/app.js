@@ -1,4 +1,15 @@
-angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker.module'])
+angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker.module', 'googleplus'])
+    .config(['GooglePlusProvider', function(GooglePlusProvider) {
+        GooglePlusProvider.init({
+            clientId: '977491754644-954b83j2evmq65v6kchq4dsd9j0ud4vg.apps.googleusercontent.com',
+            apiKey: 'AIzaSyDaMf0eviuFygt1hzwQz03a2k2lrLDnpIc'
+        });
+    }])
+    .service('gapiService', function() {
+    this.initGapi = function(postInitiation) {
+        gapi.client.load('helloWorld', 'v1', postInitiation, restURL);
+    }
+})
     .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
         $stateProvider
 
@@ -33,8 +44,8 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                     controller  : 'InfoController'
                 },
                 'body@': {
-                    templateUrl : './views/body.html',
-                    controller  : 'BodyController'
+                    templateUrl : './views/request.html',
+                    controller  : 'RequestController'
                 },
                 'secondBody@': {
                     templateUrl : './views/secondBody.html',
@@ -72,16 +83,16 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                 },
                 'body@': {
                     templateUrl : './views/bodyAdmin.html',
-                    controller  : 'BodyAdminController'
+                    controller  : 'UsersAdminController'
                 },
                 'secondBody@': {
                     templateUrl : './views/secondBodyAdmin.html',
-                    controller: 'UsersAdminController'
+                    controller: ''
                 }
             }
         })
-        
-        .state('app.adminTimeType', {
+
+            .state('app.adminTimeType', {
             url: 'admin/timeType',
             views: {
                 'info@': {
@@ -98,8 +109,8 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                 }
             }
         })
-        
-        .state('app.adminTimeState', {
+
+            .state('app.adminTimeState', {
             url: 'admin/timestate',
             views: {
                 'info@': {
@@ -116,8 +127,8 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                 }
             }
         })
-        
-        .state('app.adminTimeOffGroup', {
+
+            .state('app.adminTimeOffGroup', {
             url: 'admin/timeOffGroup',
             views: {
                 'info@': {
@@ -137,4 +148,3 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
 
         $urlRouterProvider.otherwise('/');
     }]);
-

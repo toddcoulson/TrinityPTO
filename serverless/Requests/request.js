@@ -38,7 +38,7 @@ module.exports.create = (event, context, callback) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error('Couldn\'t create the todo item.'));
+      callback(new Error('Couldn\'t create the request item.'));
       return;
     }
 
@@ -51,6 +51,56 @@ module.exports.create = (event, context, callback) => {
       }
     };
     callback(null, response);
+  });
+};
+
+module.exports.getEmployeeRequests = (event, context, callback) =>{
+  var params = {
+    TableName: 'Request',
+    IndexName: 'EmployeeRequests',
+    KeyConditionExpression: 'requestedBy = :requestedBy',
+    ExpressionAttributeValues: { ':requestedBy': event.pathParameters.employeeid}
+  }
+  dynamoDb.query(params, function(err, result) {
+    if (err) {
+      console.log(err);
+      callback(new Error('Couldn\'t get the requests for employees.'));
+      return;
+    } 
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(result.Items),
+      headers: {
+        "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+      }
+    };
+    callback(null, response);
+
+  });
+};
+
+module.exports.getApproverRequests = (event, context, callback) =>{
+  var params = {
+    TableName: 'Request',
+    IndexName: 'ApproverRequests',
+    KeyConditionExpression: 'approvedBy = :approvedBy',
+    ExpressionAttributeValues: { ':approvedBy': event.pathParameters.employeeid}
+  }
+  dynamoDb.query(params, function(err, result) {
+    if (err) {
+      console.log(err);
+      callback(new Error('Couldn\'t get the requests for employees.'));
+      return;
+    } 
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(result.Items),
+      headers: {
+        "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+      }
+    };
+    callback(null, response);
+
   });
 };
 
@@ -87,11 +137,11 @@ module.exports.delete = (event, context, callback) => {
   };
 
   // delete the todo from the database
-  dynamoDb.delete(params, (error) => {
+  dynamoDb.delete(params, (error, result) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error('Couldn\'t remove the todo item.'));
+      callback(new Error('Couldn\'t remove the request item.'));
       return;
     }
 
@@ -169,7 +219,7 @@ module.exports.update = (event, context, callback) => {
       ':timeOffGroupColor': data.timeOffGroupColor,
       ':dateModified': timestamp
     },
-    UpdateExpression: 'SET requestedBy = :requestedBy, approvedBy = :approvedBy, status = :status, startDateTime = :startDateTime, endDateTime = :endDateTime, duration = :duration, message = :message, approverMessage = :approverMessage, locked = :locked, timeState = :timeState, timeStateColor = :timeStateColor, timeOffGroup = :timeOffGroup, timeOffGroupColor = :timeOffGroupColor',
+    UpdateExpression: 'SET requestedBy = :requestedBy, approvedBy = :approvedBy, status = :status, startDateTime = :startDateTime, endDateTime = :endDateTime, duration = :duration, message = :message, approverMessage = :approverMessage, locked = :locked, timeState = :timeState, timeStateColor = :timeStateColor, timeOffGroup = :timeOffGroup, timeOffGroupColor = :timeOffGroupColor, dateModified = :dateModified',
     ReturnValues: 'ALL_NEW',
   };
 
@@ -178,7 +228,7 @@ module.exports.update = (event, context, callback) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error('Couldn\'t update the todo item.'));
+      callback(new Error('Couldn\'t update the request item.'));
       return;
     }
 

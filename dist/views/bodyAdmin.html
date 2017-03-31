@@ -1,2 +1,5 @@
-
-<user-card cardtitle="User Settings" cardobj="testUserAdminData" settings="testUserAdminSetting"></user-card>
+<div><a href="" class="" ng-click="addNew()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+</div>
+<div ng-repeat="emp in employees track by $index" >
+<user-card cardobj="emp"  delete="deleteDB(value)" update="updateDB(value)"></user-card>
+</div>

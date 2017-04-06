@@ -48,8 +48,8 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                     controller  : 'RequestController'
                 },
                 'secondBody@': {
-                    templateUrl : './views/secondBody.html',
-                    controller  : 'SecondBodyController'
+                    templateUrl : './views/secondRequest.html',
+                    controller  : 'SecondRequestController'
                 }
             }
 

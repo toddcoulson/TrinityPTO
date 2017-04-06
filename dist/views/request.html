@@ -4,7 +4,7 @@
             <p class="sectionHeaderTitle">Current Requests</p>         
         </div>
         <div class="col-sm-6 text-right">
-            <a href="#" type="submit" class="commonIconBtn" ng-click="close()">
+            <a href="" type="submit" class="commonIconBtn" ng-click="addRequest()">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
             <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
@@ -12,7 +12,7 @@
             </a>
         </div>
     </div>
-    <div ng-repeat="req in requests track by $index" >
+    <div ng-repeat="req in requests | filter: { timeState: 'pending' }" >
         <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
     </div>
 </div>

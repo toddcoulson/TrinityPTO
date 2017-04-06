@@ -7,15 +7,40 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             deletedb: '&delete',
             adddb: '&add'
         },
-        controller: ['$scope','$element', '$attrs', '$location', '$injector', function ($scope, $element, $attrs, $location, $injector) {
-            $scope.dt = new Date();
+        controller: ['$scope','$element', '$attrs', '$location', '$injector', 'timeOffGroupTestFactory', 'timeTypeTestFactory', function ($scope, $element, $attrs, $location, $injector, timeOffGroupTestFactory, timeTypeTestFactory) {
+            $scope.timeOffGroups = [];
+            $scope.timeOffGroupSelect = {};
+            $scope.timeTypes = [];
+            $scope.timeTypeSelect = {};
+            $scope.dates={};
+            $scope.dates.dt = new Date();
+            $scope.dates.dt2 = new Date();
+
+            timeOffGroupTestFactory.query().then(function(result) {
+                $scope.timeOffGroups = result 
+            }).then(function(result){
+                timeTypeTestFactory.query().then(function(result) {
+                    $scope.timeTypes = result 
+                })
+            });
+
+            $scope.changeTimeType = function(){
+                $scope.cardobj.timeType = $scope.timeTypeSelect.timeType
+            }
+
+            $scope.changeTimeOffGroup = function(){
+                $scope.cardobj.timeOffGroup = $scope.timeOffGroupSelect.timeOffGroup
+            }
+
             $scope.today = function() {
-                $scope.dt = new Date();
+                $scope.dates.dt = new Date();
+                $scope.dates.dt2 = new Date();
             };
             $scope.today();
 
             $scope.clear = function() {
-                $scope.dt = null;
+                $scope.dates.dt = null;
+                $scope.dates.dt2 = null;
             };
 
             $scope.inlineOptions = {
@@ -46,17 +71,27 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
 
             $scope.toggleMin();
 
-            $scope.open = function($event) {
-                console.log("open1:"+$scope.popup1.opened);
+            /*$scope.open = function($event) {
                 $scope.popup1.opened = true;
             };
 
             $scope.open2 = function() {
                 $scope.popup2.opened = true;
+            };*/
+
+            $scope.open = function($event,opened) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                $scope[opened] = true;
             };
 
             $scope.setDate = function(year, month, day) {
-                $scope.dt = new Date(year, month, day);
+                $scope.dates.dt = new Date(year, month, day);
+            };
+
+            $scope.setDate2 = function(year, month, day) {
+                $scope.dates.dt2 = new Date(year, month, day);
             };
 
             $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
@@ -71,7 +106,7 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                 opened: false
             };
 
-            
+
             var tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             var afterTomorrow = new Date();

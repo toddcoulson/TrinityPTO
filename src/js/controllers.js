@@ -72,6 +72,7 @@ angular.module('ptoApp')
                 $rootScope.email = response.result.emailAddresses[0].value;
                 $rootScope.callRequests();
                 $rootScope.callInfo();
+                if($rootScope.triggerSecond)$rootScope.triggerSecond();
                 employeeTestFactory.get($rootScope.email).then(function(message) {
                     console.log("This is a message!:!:!:!:"+message.firstName)
                 });
@@ -203,8 +204,19 @@ angular.module('ptoApp')
         };
 
         $scope.addDB = function(obj){
-            timeStateFactory.save(
-                {}, {timeState: obj.entityValue, timeStateColor: obj.entityColor}
+            requestFactory.save(
+                {}, {"requestedBy": $rootScope.email,
+                     "approvedBy": "",
+                     "status": "pending",
+                     "startDateTime": obj.startDateTime,
+                     "endDateTime": obj.endDateTime,
+                     "duration": obj.duration,
+                     "message": obj.message,
+                     "approverMessage": "",
+                     "locked": "false",
+                     "timeState":"pending",
+                     "timeType":obj.timeType,
+                     "timeOffGroup":obj.timeOffGroup}
             );
         };
 
@@ -214,17 +226,69 @@ angular.module('ptoApp')
             );
         };
 
+        $scope.addRequest = function(){
+            $scope.requests.unshift({"requestedBy": $rootScope.email,
+                                     "approvedBy": "",
+                                     "status": "pending",
+                                     "startDateTime": '05-April-2017',
+                                     "endDateTime": new Date(),
+                                     "duration": 8,
+                                     "message": "",
+                                     "approverMessage": "",
+                                     "locked": "false",
+                                     "timeState":"pending",
+                                     "timeType":"single day",
+                                     "timeOffGroup":"",
+                                     cardState:"add"});
+        }
+
     }])
-    .controller('SecondBodyController', ['$scope', '$state', function ($scope, $state) {
+    .controller('SecondRequestController', ['$scope', '$rootScope', '$state', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'employeeRequestFactory', function ($scope, $rootScope, $state, timeOffGroupTestFactory, timeStateTestFactory, employeeRequestFactory) {
         $scope.tab = 1;
         $scope.filtText = '';
         $scope.showDetails = false;
         $scope.showDelete = false;
         $scope.showMenu = false;
         $scope.message = "Loading ...";
+        $scope.requests = [];
+        $scope.timeStates = [];
+        $scope.timeOffGroups = [];
+        $rootScope.triggerSecond=function(){
+            timeOffGroupTestFactory.query().then(function(result) {
+                $scope.timeOffGroups = result 
+            }).then(function(result){
+                timeStateTestFactory.query().then(function(result) {
+                    console.log(result);
+                    $scope.timeStates = result 
+                })
+            }).then(function(result){
+                employeeRequestFactory.query(
+                    {employeeid: $rootScope.email}, 
+                    function (response) {
+                        console.log("requests:"+response)
+                        response.forEach(function(r, index){
+                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, status:r.status, startDateTime: r.startDateTime, endDateTime: r.endDateTime, duration: r.duration, message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"view"}
+                            $scope.timeOffGroups.forEach(function(tog, index2){
+                                if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
+                                    newValue.timeOffGroupColor = tog.timeOffGroupColor;
+                                }
+                            })
+                            $scope.timeStates.forEach(function(ts, index3){
+                                if(r.timeState.toLowerCase() == ts.timeState.toLowerCase()){
+                                    newValue.timeStateColor = ts.timeStateColor;
+                                }
+                            })
+                            $scope.requests.push(newValue);
 
-        $scope.testData = {timeOffGroup:"vacation", firstName:"Todd", lastName:"Coulson", dateTime:"17 Mar 2017", endDateTime:"28 Mar 2017", startTime:"9:30a", endTime:"10:30a", message:"Vacation Paris", approverName:"awaiting approval", approverMessage:"Client meeting that day, we need you!",cardType:'view', timeType:'daily', timeState:'pending'};
-
+                        })
+                    },
+                    function (response) {
+                        console.log(response)
+                        $scope.message = "Error: " + response.status + " " + response.statusText;
+                    }
+                );
+            }) 
+        }
         /*timeType: 'daily', //hourly, multiple, daily, editNew, edit
                 timeState: 'pending'//approved, denied*/
     }])

@@ -74,4 +74,34 @@ angular.module('ptoApp')
             'delete': {method:'DELETE'},
             'update': {method:'PUT'}
         });
-    }]);
+    }])
+
+.factory('timeStateFactory', ['$resource', 'baseURLTimeState', function ($resource, baseURLTimeState) {
+        return $resource(baseURLTimeState + "timestate/:timestateid", {timestateid:"@timestateid"}, {
+            'get':    {method:'GET'},
+            'save':   {method:'POST'},
+            'query':  {method:'GET', isArray:true},
+            'remove': {method:'DELETE'},
+            'delete': {method:'DELETE'},
+            'update': {method:'PUT'}
+        });
+    }])
+
+    .service('approverProperties', [ '$rootScope', function ($rootScope) {
+    var employeeSelect = 'none';
+
+    var observerCallbacks = [];
+
+    //call this when you know 'foo' has been changed
+
+    return {
+
+        getEmployeeSelect: function () {
+            return employeeSelect;
+        },
+        setEmployeeSelect: function(value) {
+            employeeSelect = value;
+            $rootScope.$broadcast('select:updated',employeeSelect);
+        }
+    };
+}]);

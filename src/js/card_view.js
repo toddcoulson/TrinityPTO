@@ -15,6 +15,10 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             $scope.dates={};
             $scope.dates.dt = new Date();
             $scope.dates.dt2 = new Date();
+            $scope.times={};
+            $scope.times.startTime = new Date(1970, 0, 1, 11, 00, 0);
+            $scope.times.endTime = new Date(1970, 0, 1, 11, 30, 0);
+            $scope.dt = new Date();
 
             timeOffGroupTestFactory.query().then(function(result) {
                 $scope.timeOffGroups = result 
@@ -30,6 +34,48 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
 
             $scope.changeTimeOffGroup = function(){
                 $scope.cardobj.timeOffGroup = $scope.timeOffGroupSelect.timeOffGroup
+            }
+
+            function combineDateWithTime(d, t)
+            {
+                return new Date(
+                    d.getFullYear(),
+                    d.getMonth(),
+                    d.getDate(),
+                    t.getHours(),
+                    t.getMinutes(),
+                    t.getSeconds(),
+                    t.getMilliseconds()
+                );
+            }
+            $scope.onApprove = function(){
+                $scope.cardobj.timeState = "approved";
+                $scope.updatedb({value: $scope.cardobj});
+            }
+            $scope.onDeny = function(){
+                $scope.cardobj.timeState = "denied";
+                $scope.updatedb({value: $scope.cardobj});
+            }
+            
+            $scope.close = function(){
+                $scope.deletedb({value: $scope.cardobj});
+            }
+            
+            $scope.edit = function(){
+                $scope.cardobj.cardState = "edit";
+            }
+
+            $scope.submit=function(){
+
+                $scope.cardobj.startDateTime = combineDateWithTime($scope.dates.dt,$scope.times.startTime);
+                $scope.cardobj.endDateTime = combineDateWithTime($scope.dates.dt2,$scope.times.endTime);
+
+                if($scope.cardobj.cardState === 'edit'){
+                    $scope.updatedb({value: $scope.cardobj});
+                } else if($scope.cardobj.cardState === 'add'){
+                    $scope.adddb({value: $scope.cardobj});
+                    console.log($scope.adddb)
+                }
             }
 
             $scope.today = function() {
@@ -52,8 +98,16 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             $scope.dateOptions = {
                 dateDisabled: disabled,
                 formatYear: 'yy',
-                maxDate: new Date(2020, 5, 22),
+                maxDate: $scope.dates.dt2,
                 minDate: new Date(),
+                startingDay: 1
+            };
+
+            $scope.dateOptions2 = {
+                dateDisabled: disabled,
+                formatYear: 'yy',
+                maxDate: new Date(2020, 5, 22),
+                minDate: $scope.dates.dt,
                 startingDay: 1
             };
 
@@ -69,22 +123,25 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                 $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
             };
 
+
+
             $scope.toggleMin();
-
-            /*$scope.open = function($event) {
-                $scope.popup1.opened = true;
-            };
-
-            $scope.open2 = function() {
-                $scope.popup2.opened = true;
-            };*/
 
             $scope.open = function($event,opened) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
                 $scope[opened] = true;
+                $scope.dateOptions.maxDate = $scope.dates.dt2;
+                $scope.dateOptions2.minDate = $scope.dates.dt;
             };
+            $scope.minDate = function(){
+                return new Date($scope.dates.dt);
+            }
+
+            $scope.maxDate = function(){
+                return new Date($scope.dates.dt2);
+            }
 
             $scope.setDate = function(year, month, day) {
                 $scope.dates.dt = new Date(year, month, day);

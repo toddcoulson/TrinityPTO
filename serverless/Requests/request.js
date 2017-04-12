@@ -10,24 +10,22 @@ module.exports.create = (event, context, callback) => {
     callback(new Error('Couldn\'t create the todo item.'));
     return;
   }
-
+  
   const params = {
     TableName: 'Request',
     Item: {
       requestid: uuid.v1(),
       requestedBy: data.requestedBy,
       approvedBy: data.approvedBy,
-      status: data.status,
+      timeState: data.timeState,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      duration: data.duration,
+      timeDuration: data.timeDuration,
       message: data.message,
       approverMessage: data.approverMessage,
       locked: data.locked,
-      timeState: data.timeState,
-      timeStateColor: data.timeStateColor,
+      timeType: data.timeType,
       timeOffGroup: data.timeOffGroup,
-      timeOffGroupColor: data.timeOffGroupColor,
       dateCreated: timestamp,
       dateModified: timestamp
     },
@@ -189,11 +187,31 @@ module.exports.get = (event, context, callback) => {
 module.exports.update = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-
+console.log(typeof data.requestedBy !== 'string'  , 
+      typeof data.approvedBy !== 'string'  , 
+      typeof data.timeState !== 'string'  , 
+      typeof data.startDateTime !== 'string' ,  
+      typeof data.endDateTime !== 'string' ,  
+      typeof data.timeDuration ,  
+      typeof data.message !== 'string' ,  
+      typeof data.approverMessage !== 'string' ,  
+      typeof data.locked !== 'string' ,  
+      typeof data.timeOffGroup !== 'string')
   // validation
-  if (typeof data.requestedBy !== 'string'  || typeof data.approvedBy !== 'string'  || typeof data.status !== 'string'  || typeof data.startDateTime !== 'string' ||  data.endDateTime !== 'string' ||  data.duration !== 'string' ||  data.message !== 'string' ||  data.approverMessage !== 'string' ||  data.locked !== 'string' ||  data.timeState !== 'string' ||  data.timeStateColor !== 'string' ||  data.timeOffGroup !== 'string' ||  data.timeOffGroupColor !== 'string' ) {
+  if (typeof data.requestedBy !== 'string'  || 
+      typeof data.approvedBy !== 'string'  || 
+      typeof data.timeState !== 'string'  || 
+      typeof data.startDateTime !== 'string' ||  
+      typeof data.endDateTime !== 'string' ||  
+      typeof data.timeDuration !== 'object' ||  
+      typeof data.message !== 'string' ||  
+      typeof data.approverMessage !== 'string' ||  
+      typeof data.locked !== 'string' ||  
+      //typeof data.timeType !== 'string' ||  
+      typeof data.timeOffGroup !== 'string') {
+
     console.error('Validation Failed');
-    callback(new Error('Couldn\'t update the todo item.'));
+    callback(new Error('Couldn\'t update the request item.'));
     return;
   }
 
@@ -206,20 +224,20 @@ module.exports.update = (event, context, callback) => {
     ExpressionAttributeValues: {
       ':requestedBy': data.requestedBy,
       ':approvedBy': data.approvedBy,
-      ':status': data.status,
+      ':timeState': data.timeState,
       ':startDateTime': data.startDateTime,
       ':endDateTime': data.endDateTime,
-      ':duration': data.duration,
+      ':timeDuration': data.timeDuration,
       ':message': data.message,
       ':approverMessage': data.approverMessage,
       ':locked': data.locked,
-      ':timeState': data.timeState,
-      ':timeStateColor': data.timeStateColor,
+      //':timeType': data.timeType,
       ':timeOffGroup': data.timeOffGroup,
-      ':timeOffGroupColor': data.timeOffGroupColor,
       ':dateModified': timestamp
     },
-    UpdateExpression: 'SET requestedBy = :requestedBy, approvedBy = :approvedBy, status = :status, startDateTime = :startDateTime, endDateTime = :endDateTime, duration = :duration, message = :message, approverMessage = :approverMessage, locked = :locked, timeState = :timeState, timeStateColor = :timeStateColor, timeOffGroup = :timeOffGroup, timeOffGroupColor = :timeOffGroupColor, dateModified = :dateModified',
+            UpdateExpression: 'SET requestedBy = :requestedBy, approvedBy = :approvedBy, timeState = :timeState, startDateTime = :startDateTime, endDateTime = :endDateTime, timeDuration = :timeDuration, message = :message, approverMessage = :approverMessage, locked = :locked, timeOffGroup = :timeOffGroup, dateModified = :dateModified',
+
+
     ReturnValues: 'ALL_NEW',
   };
 

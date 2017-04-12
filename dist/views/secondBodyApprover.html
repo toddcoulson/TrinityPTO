@@ -1,1 +1,16 @@
-second body approver
+<div class="sectionTable">
+    <div class="row">
+        <div class="col-sm-6">
+            <p class="sectionHeaderTitle">Evaluated Requests</p>         
+        </div>
+        <div class="col-sm-6 text-right">
+            <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    selectEmpID:{{selectEmpID}}
+    <div ng-repeat="req in requests | filter:selectEmpIDMatch(selectEmpID) " >
+        <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
+    </div>
+</div>

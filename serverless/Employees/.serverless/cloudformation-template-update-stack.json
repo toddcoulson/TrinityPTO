@@ -189,7 +189,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1489975021282-2017-03-20T01:57:01.282Z/employees.zip"
+          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
         },
         "FunctionName": "employees-dev-createEmployee",
         "Handler": "employee.create",
@@ -208,14 +208,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "CreateEmployeeLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk": {
+    "CreateEmployeeLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateEmployeeLambdaFunction"
         },
-        "CodeSha256": "19KmJDyZ6A9U3DMmCvSRFDu4+5WF92yA8pyC8lhv6uk="
+        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
       }
     },
     "ListEmployeesLambdaFunction": {
@@ -225,7 +225,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1489975021282-2017-03-20T01:57:01.282Z/employees.zip"
+          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
         },
         "FunctionName": "employees-dev-listEmployees",
         "Handler": "employee.list",
@@ -244,14 +244,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ListEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk": {
+    "ListEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListEmployeesLambdaFunction"
         },
-        "CodeSha256": "19KmJDyZ6A9U3DMmCvSRFDu4+5WF92yA8pyC8lhv6uk="
+        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
       }
     },
     "GetEmployeesLambdaFunction": {
@@ -261,7 +261,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1489975021282-2017-03-20T01:57:01.282Z/employees.zip"
+          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
         },
         "FunctionName": "employees-dev-getEmployees",
         "Handler": "employee.get",
@@ -280,14 +280,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "GetEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk": {
+    "GetEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetEmployeesLambdaFunction"
         },
-        "CodeSha256": "19KmJDyZ6A9U3DMmCvSRFDu4+5WF92yA8pyC8lhv6uk="
+        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
       }
     },
     "UpdateEmployeesLambdaFunction": {
@@ -297,7 +297,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1489975021282-2017-03-20T01:57:01.282Z/employees.zip"
+          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
         },
         "FunctionName": "employees-dev-updateEmployees",
         "Handler": "employee.update",
@@ -316,14 +316,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "UpdateEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk": {
+    "UpdateEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateEmployeesLambdaFunction"
         },
-        "CodeSha256": "19KmJDyZ6A9U3DMmCvSRFDu4+5WF92yA8pyC8lhv6uk="
+        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
       }
     },
     "DeleteEmployeesLambdaFunction": {
@@ -333,7 +333,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1489975021282-2017-03-20T01:57:01.282Z/employees.zip"
+          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
         },
         "FunctionName": "employees-dev-deleteEmployees",
         "Handler": "employee.delete",
@@ -352,14 +352,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "DeleteEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk": {
+    "DeleteEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteEmployeesLambdaFunction"
         },
-        "CodeSha256": "19KmJDyZ6A9U3DMmCvSRFDu4+5WF92yA8pyC8lhv6uk="
+        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
       }
     },
     "ApiGatewayRestApi": {
@@ -677,7 +677,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1489975021297": {
+    "ApiGatewayDeployment1491849499192": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -919,31 +919,31 @@
     "CreateEmployeeLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateEmployeeLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk"
+        "Ref": "CreateEmployeeLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
       }
     },
     "ListEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk"
+        "Ref": "ListEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
       }
     },
     "GetEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk"
+        "Ref": "GetEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
       }
     },
     "UpdateEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk"
+        "Ref": "UpdateEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
       }
     },
     "DeleteEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteEmployeesLambdaVersion19KmJDyZ6A9U3DMmCvSRFDu45WF92yA8pyC8lhv6uk"
+        "Ref": "DeleteEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
       }
     },
     "ServiceEndpoint": {

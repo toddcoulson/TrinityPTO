@@ -1,1 +1,27 @@
-info approver
+
+<div class="sectionTable">
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <select class="custom-select" ng-options="emp.employeeid for emp in employees" ng-model="employeeSelect" ng-change="changeEmployee()"></select>
+        </div>
+        <div class="col-sm-6" ng-show="employeeSelect !== 'none'">
+            <p class="card-text textValueCard pull-right">{{employeeSelect.totalTimeUsed}} hrs / {{employeeSelect.totalTimeAccrued}} hrs</p>
+        </div>
+    </div>
+    <div class="row" ng-show="employeeSelect !== 'none'">
+        <div class="col-sm-6">
+            <p class="card-text textLabelCard">{{employeeSelect.employeeType}}</p>
+        </div>
+        <div class="col-sm-6">
+            <p class="card-text textValueCard pull-right">{{employeeSelect.employeeid}}</p>
+        </div>
+
+    </div>
+</div>

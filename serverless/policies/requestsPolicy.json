@@ -1,0 +1,123 @@
+{
+    "Version":"2012-10-17",
+    "Statement":[
+        {
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams",
+                "logs:FilterLogEvents",
+                "logs:DeleteRequestLogGroup",
+                "logs:UpdateRequestLogGroup"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "cloudformation:CreateStack",
+                "cloudformation:CreateUploadBucket",
+                "cloudformation:DeleteStack",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:DescribeStackResource",
+                "cloudformation:DescribeStackResources",
+                "cloudformation:UpdateStack",
+                "cloudformation:DescribeStacks"
+            ],
+            "Resource":[
+                "arn:aws:cloudformation:us-east-1:635337925294:stack/requests-dev/*"
+            ]
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "s3:PutObject",
+                "s3:DeleteObject",
+                "s3:CreateBucket",
+                "s3:DeleteBucket",
+                "s3:ListBucket",
+                "s3:ListBucketVersions",
+                "s3:GetBucketVersioning",
+                "s3:PutBucketVersioning",
+                "s3:GetBucketLocation"
+            ],
+            "Resource":[
+                "arn:aws:s3:::requests-dev-*/*",
+                "arn:aws:s3:::requests-dev-*"
+            ]
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfig",
+                "lambda:AddPermission",
+                "lambda:PublishVersion",
+                "lambda:GetFunction",
+                "lambda:GetFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:ListVersionsByFunction"
+            ],
+            "Resource":[
+                "arn:aws:lambda:us-east-1:635337925294:function:requests-dev-*"
+            ]
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "iam:CreateRole",
+                "iam:DeleteRole",
+                "iam:GetRole",
+                "iam:PassRole",
+                "iam:DeleteRolePolicy",
+                "iam:PutRolePolicy"
+            ],
+            "Resource":[
+                "arn:aws:iam::635337925294:role/requests-dev-us-east-1-lambdaRole"
+            ]
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "logs:DescribeLogStreams",
+                "logs:FilterLogEvents"
+            ],
+            "Resource":[
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:GET",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:DELETE"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect":"Allow",
+            "Action":[
+                "cloudwatch:GetMetricStatistics"
+            ],
+            "Resource":[
+                "*"
+            ]
+        }
+    ]
+}

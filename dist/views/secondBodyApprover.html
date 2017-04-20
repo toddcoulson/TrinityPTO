@@ -4,13 +4,13 @@
             <p class="sectionHeaderTitle">Evaluated Requests</p>         
         </div>
         <div class="col-sm-6 text-right">
-            <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
-                <i class="fa fa-eye" aria-hidden="true"></i>
+            <a href="" type="submit" class="commonIconBtn" ng-click="hideSession()">
+                <i ng-show="!displaySection" class="fa fa-eye" aria-hidden="true"></i>
+                <i ng-show="displaySection" class="fa fa-eye-slash" aria-hidden="true"></i>
             </a>
         </div>
     </div>
-    selectEmpID:{{selectEmpID}}
-    <div ng-repeat="req in requests | filter:selectEmpIDMatch(selectEmpID) " >
-        <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
+    <div ng-show="displaySection" ng-repeat="req in requests | filter:selectEmpIDMatch(selectEmpID) " >
+        <card-view class="requestCard" fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
     </div>
 </div>

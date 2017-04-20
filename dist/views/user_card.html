@@ -4,34 +4,47 @@
             <div class="row">
 
                 <div class="col-sm-12">
-                    <a href="" class="pull-right" ng-click="delete()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                    <a href="" class="pull-right" ng-click="edit()"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="" class="pull-right commonIconBtn" ng-click="delete()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    <a href="" class="pull-right commonIconBtn" ng-click="edit()"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </div>
             </div>
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
+                    <p class="card-text textLabelCard">Employee ID:</p>
+                </div>
+
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'add'">
+                    <p class="card-text textValueCard pull-right">{{cardobj.employeeid}}</p>
+                </div>
+                <div class="col-sm-7" ng-show="cardobj.cardState === 'add'">
+                    <input class="form-control input-group" type="text" ng-model="cardobj.employeeid" value="{{cardobj.employeeid}}" id="example-text-input">
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-4">
                     <p class="card-text textLabelCard">First Name:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.firstName}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
-                    <input class="form-control" type="text" ng-model="cardobj.firstName" value="{{cardobj.firstName}}" id="example-text-input">
+                <div class="col-sm-7" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
+                    <input class="form-control input-group" type="text" ng-model="cardobj.firstName" value="{{cardobj.firstName}}" id="example-text-input">
                 </div>
             </div>
             
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <p class="card-text textLabelCard">Last Name:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.lastName}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <input class="form-control" type="text" ng-model="cardobj.lastName" value="{{cardobj.lastName}}" id="example-text-input">
                 </div>
             </div>
@@ -69,18 +82,18 @@
 
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <p class="card-text textLabelCard">Employee Start Date:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.employeeStartDate | date:'yyyy-MMM-dd'}}</p>
                 </div>
-                <div class="col-sm-6 input-group" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
+                <div class="col-sm-7 input-group" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
 
-                    <input type="text" class="form-control" uib-datepicker-popup="dd-MMM-yyyy" ng-model="cardobj.employeeStartDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-click="open($event)" />
+                    <input type="text" class="form-control user-cal-left" uib-datepicker-popup="dd-MMM-yyyy" ng-model="cardobj.employeeStartDate" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-click="open($event)" />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default btn-cal user-cal-right" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
 
 
@@ -88,33 +101,36 @@
             </div>
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <p class="card-text textLabelCard">Accrued Hours:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.totalTimeAccrued}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
-                    <div class="input-group">
+                <div class="col-sm-7" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                         <input class="form-control" type="number" min="0" ng-model="cardobj.totalTimeAccrued" value="{{cardobj.totalTimeAccrued}}" id="example-text-input">
-                    </div>
+                   
                 </div>
             </div>
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <p class="card-text textLabelCard">Hours Used:</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'">
                     <p class="card-text textValueCard pull-right">{{cardobj.totalTimeUsed}}</p>
                 </div>
-                <div class="col-sm-6" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
+                <div class="col-sm-7" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'">
                     <input class="form-control" type="number" min="0" ng-model="cardobj.totalTimeUsed" value="{{cardobj.totalTimeUsed}}" id="example-text-input">
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="col-sm-12">
+                    <a href="" ng-show="cardobj.cardState === 'edit' || cardobj.cardState === 'add'" class="pull-right" ng-click="submit()"><i class="fa fa-check" aria-hidden="true"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

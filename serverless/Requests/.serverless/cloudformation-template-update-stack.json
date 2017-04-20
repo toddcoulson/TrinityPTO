@@ -5,46 +5,46 @@
     "ServerlessDeploymentBucket": {
       "Type": "AWS::S3::Bucket"
     },
-    "CreateRequestLogGroup": {
+    "CreateRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-createRequest"
+        "LogGroupName": "/aws/lambda/requests-dev-createRequestNewPTO"
       }
     },
-    "ListRequestLogGroup": {
+    "ListRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-listRequest"
+        "LogGroupName": "/aws/lambda/requests-dev-listRequestNewPTO"
       }
     },
-    "GetRequestLogGroup": {
+    "GetRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-getRequest"
+        "LogGroupName": "/aws/lambda/requests-dev-getRequestNewPTO"
       }
     },
-    "GetEmployeeRequestsLogGroup": {
+    "GetEmployeeRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-getEmployeeRequests"
+        "LogGroupName": "/aws/lambda/requests-dev-getEmployeeRequestNewPTO"
       }
     },
-    "GetApproverRequestsLogGroup": {
+    "GetApproverRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-getApproverRequests"
+        "LogGroupName": "/aws/lambda/requests-dev-getApproverRequestNewPTO"
       }
     },
-    "UpdateRequestLogGroup": {
+    "UpdateRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-updateRequest"
+        "LogGroupName": "/aws/lambda/requests-dev-updateRequestNewPTO"
       }
     },
-    "DeleteRequestLogGroup": {
+    "DeleteRequestNewPTOLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/requests-dev-deleteRequest"
+        "LogGroupName": "/aws/lambda/requests-dev-deleteRequestNewPTO"
       }
     },
     "IamRoleLambdaExecution": {
@@ -66,6 +66,90 @@
             }
           ]
         },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "requests",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-createRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-listRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getEmployeeRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getApproverRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-updateRequestNewPTO:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-deleteRequestNewPTO:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-createRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-listRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getEmployeeRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-getApproverRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-updateRequestNewPTO:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/requests-dev-deleteRequestNewPTO:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Action": [
+                    "dynamodb:*"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
         "Path": "/",
         "RoleName": {
           "Fn::Join": [
@@ -80,158 +164,16 @@
         }
       }
     },
-    "IamPolicyLambdaExecution": {
-      "Type": "AWS::IAM::Policy",
-      "DependsOn": [
-        "IamRoleLambdaExecution"
-      ],
-      "Properties": {
-        "PolicyName": {
-          "Fn::Join": [
-            "-",
-            [
-              "dev",
-              "requests",
-              "lambda"
-            ]
-          ]
-        },
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "CreateRequestLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "ListRequestLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "GetRequestLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "GetEmployeeRequestsLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "GetApproverRequestsLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "UpdateRequestLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "DeleteRequestLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Resource": "*",
-              "Action": [
-                "dynamodb:*"
-              ]
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "IamRoleLambdaExecution"
-          }
-        ]
-      }
-    },
-    "CreateRequestLambdaFunction": {
+    "CreateRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-createRequest",
+        "FunctionName": "requests-dev-createRequestNewPTO",
         "Handler": "request.create",
         "MemorySize": 1024,
         "Role": {
@@ -244,30 +186,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "CreateRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "CreateRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "CreateRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "CreateRequestLambdaFunction"
+          "Ref": "CreateRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "ListRequestLambdaFunction": {
+    "ListRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-listRequest",
+        "FunctionName": "requests-dev-listRequestNewPTO",
         "Handler": "request.list",
         "MemorySize": 1024,
         "Role": {
@@ -280,30 +222,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "ListRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "ListRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "ListRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "ListRequestLambdaFunction"
+          "Ref": "ListRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "GetRequestLambdaFunction": {
+    "GetRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-getRequest",
+        "FunctionName": "requests-dev-getRequestNewPTO",
         "Handler": "request.get",
         "MemorySize": 1024,
         "Role": {
@@ -316,30 +258,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "GetRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "GetRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "GetRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "GetRequestLambdaFunction"
+          "Ref": "GetRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "GetEmployeeRequestsLambdaFunction": {
+    "GetEmployeeRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-getEmployeeRequests",
+        "FunctionName": "requests-dev-getEmployeeRequestNewPTO",
         "Handler": "request.getEmployeeRequests",
         "MemorySize": 1024,
         "Role": {
@@ -352,30 +294,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "GetEmployeeRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "GetEmployeeRequestsLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "GetEmployeeRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "GetEmployeeRequestsLambdaFunction"
+          "Ref": "GetEmployeeRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "GetApproverRequestsLambdaFunction": {
+    "GetApproverRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-getApproverRequests",
+        "FunctionName": "requests-dev-getApproverRequestNewPTO",
         "Handler": "request.getApproverRequests",
         "MemorySize": 1024,
         "Role": {
@@ -388,30 +330,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "GetApproverRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "GetApproverRequestsLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "GetApproverRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "GetApproverRequestsLambdaFunction"
+          "Ref": "GetApproverRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "UpdateRequestLambdaFunction": {
+    "UpdateRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-updateRequest",
+        "FunctionName": "requests-dev-updateRequestNewPTO",
         "Handler": "request.update",
         "MemorySize": 1024,
         "Role": {
@@ -424,30 +366,30 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "UpdateRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "UpdateRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "UpdateRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "UpdateRequestLambdaFunction"
+          "Ref": "UpdateRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
-    "DeleteRequestLambdaFunction": {
+    "DeleteRequestNewPTOLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/requests/dev/1492012486492-2017-04-12T15:54:46.492Z/requests.zip"
+          "S3Key": "serverless/requests/dev/1492718575494-2017-04-20T20:02:55.494Z/requests.zip"
         },
-        "FunctionName": "requests-dev-deleteRequest",
+        "FunctionName": "requests-dev-deleteRequestNewPTO",
         "Handler": "request.delete",
         "MemorySize": 1024,
         "Role": {
@@ -460,18 +402,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "DeleteRequestNewPTOLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "DeleteRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U": {
+    "DeleteRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "DeleteRequestLambdaFunction"
+          "Ref": "DeleteRequestNewPTOLambdaFunction"
         },
-        "CodeSha256": "F+4g05TFJ02wCXhX06sdQ+09SsqEQnsZ/rsMoTlE83U="
+        "CodeSha256": "rMyGT54Q1/Vw4XmJIcHigrU8Z9+SkWiSSAcUK7uAj4E="
       }
     },
     "ApiGatewayRestApi": {
@@ -765,7 +707,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "CreateRequestLambdaFunction",
+                    "CreateRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -803,7 +745,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "ListRequestLambdaFunction",
+                    "ListRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -841,7 +783,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "GetRequestLambdaFunction",
+                    "GetRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -879,7 +821,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "GetEmployeeRequestsLambdaFunction",
+                    "GetEmployeeRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -917,7 +859,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "GetApproverRequestsLambdaFunction",
+                    "GetApproverRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -955,7 +897,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "UpdateRequestLambdaFunction",
+                    "UpdateRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -993,7 +935,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "DeleteRequestLambdaFunction",
+                    "DeleteRequestNewPTOLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -1005,7 +947,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1492012486506": {
+    "ApiGatewayDeployment1492718575510": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1023,12 +965,12 @@
         "ApiGatewayMethodRequestRequestidVarDelete"
       ]
     },
-    "CreateRequestLambdaPermissionApiGateway": {
+    "CreateRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "CreateRequestLambdaFunction",
+            "CreateRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1056,12 +998,12 @@
         }
       }
     },
-    "ListRequestLambdaPermissionApiGateway": {
+    "ListRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "ListRequestLambdaFunction",
+            "ListRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1089,12 +1031,12 @@
         }
       }
     },
-    "GetRequestLambdaPermissionApiGateway": {
+    "GetRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "GetRequestLambdaFunction",
+            "GetRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1122,12 +1064,12 @@
         }
       }
     },
-    "GetEmployeeRequestsLambdaPermissionApiGateway": {
+    "GetEmployeeRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "GetEmployeeRequestsLambdaFunction",
+            "GetEmployeeRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1155,12 +1097,12 @@
         }
       }
     },
-    "GetApproverRequestsLambdaPermissionApiGateway": {
+    "GetApproverRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "GetApproverRequestsLambdaFunction",
+            "GetApproverRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1188,12 +1130,12 @@
         }
       }
     },
-    "UpdateRequestLambdaPermissionApiGateway": {
+    "UpdateRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "UpdateRequestLambdaFunction",
+            "UpdateRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1221,12 +1163,12 @@
         }
       }
     },
-    "DeleteRequestLambdaPermissionApiGateway": {
+    "DeleteRequestNewPTOLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "DeleteRequestLambdaFunction",
+            "DeleteRequestNewPTOLambdaFunction",
             "Arn"
           ]
         },
@@ -1257,7 +1199,7 @@
     "DynamoDbTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Request",
+        "TableName": "RequestNewPTO",
         "AttributeDefinitions": [
           {
             "AttributeName": "requestid",
@@ -1344,7 +1286,7 @@
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem"
               ],
-              "Resource": "arn:aws:dynamodb:*:*:table/Request"
+              "Resource": "arn:aws:dynamodb:*:*:table/RequestNewPTO"
             }
           ]
         },
@@ -1362,46 +1304,46 @@
         "Ref": "ServerlessDeploymentBucket"
       }
     },
-    "CreateRequestLambdaFunctionQualifiedArn": {
+    "CreateRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "CreateRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "ListRequestLambdaFunctionQualifiedArn": {
+    "ListRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "ListRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "GetRequestLambdaFunctionQualifiedArn": {
+    "GetRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "GetRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "GetEmployeeRequestsLambdaFunctionQualifiedArn": {
+    "GetEmployeeRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetEmployeeRequestsLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "GetEmployeeRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "GetApproverRequestsLambdaFunctionQualifiedArn": {
+    "GetApproverRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetApproverRequestsLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "GetApproverRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "UpdateRequestLambdaFunctionQualifiedArn": {
+    "UpdateRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "UpdateRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
-    "DeleteRequestLambdaFunctionQualifiedArn": {
+    "DeleteRequestNewPTOLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteRequestLambdaVersionF4g05TFJ02wCXhX06sdQ09SsqEQnsZrsMoTlE83U"
+        "Ref": "DeleteRequestNewPTOLambdaVersionrMyGT54Q1Vw4XmJIcHigrU8Z9SkWiSSAcUK7uAj4E"
       }
     },
     "ServiceEndpoint": {

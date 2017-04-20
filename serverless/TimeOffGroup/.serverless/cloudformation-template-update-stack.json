@@ -54,6 +54,78 @@
             }
           ]
         },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "timeOffGroup",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-createTimeOffGroup:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-listTimeOffGroup:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-getTimeOffGroup:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-updateTimeOffGroup:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-deleteTimeOffGroup:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-createTimeOffGroup:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-listTimeOffGroup:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-getTimeOffGroup:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-updateTimeOffGroup:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/timeOffGroup-dev-deleteTimeOffGroup:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Action": [
+                    "dynamodb:*"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
         "Path": "/",
         "RoleName": {
           "Fn::Join": [
@@ -68,120 +140,6 @@
         }
       }
     },
-    "IamPolicyLambdaExecution": {
-      "Type": "AWS::IAM::Policy",
-      "DependsOn": [
-        "IamRoleLambdaExecution"
-      ],
-      "Properties": {
-        "PolicyName": {
-          "Fn::Join": [
-            "-",
-            [
-              "dev",
-              "timeOffGroup",
-              "lambda"
-            ]
-          ]
-        },
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "CreateTimeOffGroupLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "ListTimeOffGroupLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "GetTimeOffGroupLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "UpdateTimeOffGroupLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "DeleteTimeOffGroupLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Resource": "*",
-              "Action": [
-                "dynamodb:*"
-              ]
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "IamRoleLambdaExecution"
-          }
-        ]
-      }
-    },
     "CreateTimeOffGroupLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -189,7 +147,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/timeOffGroup/dev/1490187959851-2017-03-22T13:05:59.851Z/timeOffGroup.zip"
+          "S3Key": "serverless/timeOffGroup/dev/1492615228104-2017-04-19T15:20:28.104Z/timeOffGroup.zip"
         },
         "FunctionName": "timeOffGroup-dev-createTimeOffGroup",
         "Handler": "timeOffGroup.create",
@@ -204,18 +162,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "CreateTimeOffGroupLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "CreateTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8": {
+    "CreateTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateTimeOffGroupLambdaFunction"
         },
-        "CodeSha256": "/KV3fRUyYFR8e1b7N+WuDIpkV0KmsgSFAHRv/DKFOf8="
+        "CodeSha256": "Bnq1A7/+jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls="
       }
     },
     "ListTimeOffGroupLambdaFunction": {
@@ -225,7 +183,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/timeOffGroup/dev/1490187959851-2017-03-22T13:05:59.851Z/timeOffGroup.zip"
+          "S3Key": "serverless/timeOffGroup/dev/1492615228104-2017-04-19T15:20:28.104Z/timeOffGroup.zip"
         },
         "FunctionName": "timeOffGroup-dev-listTimeOffGroup",
         "Handler": "timeOffGroup.list",
@@ -240,18 +198,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "ListTimeOffGroupLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "ListTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8": {
+    "ListTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListTimeOffGroupLambdaFunction"
         },
-        "CodeSha256": "/KV3fRUyYFR8e1b7N+WuDIpkV0KmsgSFAHRv/DKFOf8="
+        "CodeSha256": "Bnq1A7/+jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls="
       }
     },
     "GetTimeOffGroupLambdaFunction": {
@@ -261,7 +219,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/timeOffGroup/dev/1490187959851-2017-03-22T13:05:59.851Z/timeOffGroup.zip"
+          "S3Key": "serverless/timeOffGroup/dev/1492615228104-2017-04-19T15:20:28.104Z/timeOffGroup.zip"
         },
         "FunctionName": "timeOffGroup-dev-getTimeOffGroup",
         "Handler": "timeOffGroup.get",
@@ -276,18 +234,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "GetTimeOffGroupLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "GetTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8": {
+    "GetTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetTimeOffGroupLambdaFunction"
         },
-        "CodeSha256": "/KV3fRUyYFR8e1b7N+WuDIpkV0KmsgSFAHRv/DKFOf8="
+        "CodeSha256": "Bnq1A7/+jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls="
       }
     },
     "UpdateTimeOffGroupLambdaFunction": {
@@ -297,7 +255,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/timeOffGroup/dev/1490187959851-2017-03-22T13:05:59.851Z/timeOffGroup.zip"
+          "S3Key": "serverless/timeOffGroup/dev/1492615228104-2017-04-19T15:20:28.104Z/timeOffGroup.zip"
         },
         "FunctionName": "timeOffGroup-dev-updateTimeOffGroup",
         "Handler": "timeOffGroup.update",
@@ -312,18 +270,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "UpdateTimeOffGroupLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "UpdateTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8": {
+    "UpdateTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateTimeOffGroupLambdaFunction"
         },
-        "CodeSha256": "/KV3fRUyYFR8e1b7N+WuDIpkV0KmsgSFAHRv/DKFOf8="
+        "CodeSha256": "Bnq1A7/+jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls="
       }
     },
     "DeleteTimeOffGroupLambdaFunction": {
@@ -333,7 +291,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/timeOffGroup/dev/1490187959851-2017-03-22T13:05:59.851Z/timeOffGroup.zip"
+          "S3Key": "serverless/timeOffGroup/dev/1492615228104-2017-04-19T15:20:28.104Z/timeOffGroup.zip"
         },
         "FunctionName": "timeOffGroup-dev-deleteTimeOffGroup",
         "Handler": "timeOffGroup.delete",
@@ -348,18 +306,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "DeleteTimeOffGroupLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "DeleteTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8": {
+    "DeleteTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteTimeOffGroupLambdaFunction"
         },
-        "CodeSha256": "/KV3fRUyYFR8e1b7N+WuDIpkV0KmsgSFAHRv/DKFOf8="
+        "CodeSha256": "Bnq1A7/+jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls="
       }
     },
     "ApiGatewayRestApi": {
@@ -677,7 +635,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1490187959863": {
+    "ApiGatewayDeployment1492615228115": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -919,31 +877,31 @@
     "CreateTimeOffGroupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8"
+        "Ref": "CreateTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls"
       }
     },
     "ListTimeOffGroupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8"
+        "Ref": "ListTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls"
       }
     },
     "GetTimeOffGroupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8"
+        "Ref": "GetTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls"
       }
     },
     "UpdateTimeOffGroupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8"
+        "Ref": "UpdateTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls"
       }
     },
     "DeleteTimeOffGroupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteTimeOffGroupLambdaVersionKV3fRUyYFR8e1b7NWuDIpkV0KmsgSFAHRvDKFOf8"
+        "Ref": "DeleteTimeOffGroupLambdaVersionBnq1A7jXzCXZeUYOb1fsxQTE7lvJLsEaToyUfQ6ls"
       }
     },
     "ServiceEndpoint": {

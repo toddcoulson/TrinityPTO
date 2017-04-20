@@ -1,4 +1,4 @@
-service: employees
+service: employeesNew
 
 provider:
   name: aws
@@ -67,7 +67,7 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Employee
+        TableName: EmployeesPTO
         AttributeDefinitions:
           - AttributeName: employeeid
             AttributeType: S
@@ -93,6 +93,6 @@ resources:
                 - dynamodb:PutItem
                 - dynamodb:UpdateItem
                 - dynamodb:DeleteItem
-              Resource: arn:aws:dynamodb:*:*:table/Employee
+              Resource: arn:aws:dynamodb:*:*:table/EmployeesPTO
         Roles:
           - Ref: IamRoleLambdaExecution

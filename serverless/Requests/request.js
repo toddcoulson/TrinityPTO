@@ -5,14 +5,26 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  if (typeof data.status !== 'string') {
+  
+  console.log('requestedBy:', typeof data.requestedBy !== 'string'  , 
+      'approvedBy:', typeof data.approvedBy !== 'string'  , 
+      'timeState:', typeof data.timeState !== 'string'  , 
+      'startDateTime:',typeof data.startDateTime !== 'string' ,  
+      'endDateTime:',typeof data.endDateTime !== 'string' ,  
+      'timeDuration:',typeof data.timeDuration,  
+      'message:',typeof data.message !== 'string' ,  
+      'approverMessage:',typeof data.approverMessage !== 'string' ,  
+      'locked:',typeof data.locked !== 'string' ,  
+      'timeOffGroup:',typeof data.timeOffGroup !== 'string')
+  
+  if (typeof data.timeState !== 'string') {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t create the todo item.'));
     return;
   }
   
   const params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     Item: {
       requestid: uuid.v1(),
       requestedBy: data.requestedBy,
@@ -24,7 +36,6 @@ module.exports.create = (event, context, callback) => {
       message: data.message,
       approverMessage: data.approverMessage,
       locked: data.locked,
-      timeType: data.timeType,
       timeOffGroup: data.timeOffGroup,
       dateCreated: timestamp,
       dateModified: timestamp
@@ -54,7 +65,7 @@ module.exports.create = (event, context, callback) => {
 
 module.exports.getEmployeeRequests = (event, context, callback) =>{
   var params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     IndexName: 'EmployeeRequests',
     KeyConditionExpression: 'requestedBy = :requestedBy',
     ExpressionAttributeValues: { ':requestedBy': event.pathParameters.employeeid}
@@ -79,7 +90,7 @@ module.exports.getEmployeeRequests = (event, context, callback) =>{
 
 module.exports.getApproverRequests = (event, context, callback) =>{
   var params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     IndexName: 'ApproverRequests',
     KeyConditionExpression: 'approvedBy = :approvedBy',
     ExpressionAttributeValues: { ':approvedBy': event.pathParameters.employeeid}
@@ -104,7 +115,7 @@ module.exports.getApproverRequests = (event, context, callback) =>{
 
 module.exports.list = (event, context, callback) => {
   const params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
   };
   dynamoDb.scan(params, (error, result) => {
     // handle potential errors
@@ -128,7 +139,7 @@ module.exports.list = (event, context, callback) => {
 
 module.exports.delete = (event, context, callback) => {
   const params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     Key: {
       requestid: event.pathParameters.requestid,
     },
@@ -157,7 +168,7 @@ module.exports.delete = (event, context, callback) => {
 
 module.exports.get = (event, context, callback) => {
   const params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     Key: {
       requestid: event.pathParameters.requestid,
     },
@@ -187,27 +198,26 @@ module.exports.get = (event, context, callback) => {
 module.exports.update = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-console.log(typeof data.requestedBy !== 'string'  , 
-      typeof data.approvedBy !== 'string'  , 
-      typeof data.timeState !== 'string'  , 
-      typeof data.startDateTime !== 'string' ,  
-      typeof data.endDateTime !== 'string' ,  
-      typeof data.timeDuration ,  
-      typeof data.message !== 'string' ,  
-      typeof data.approverMessage !== 'string' ,  
-      typeof data.locked !== 'string' ,  
-      typeof data.timeOffGroup !== 'string')
+/*console.log('requestedBy:', typeof data.requestedBy !== 'string'  , 
+      'approvedBy:', typeof data.approvedBy !== 'string'  , 
+      'timeState:', typeof data.timeState !== 'string'  , 
+      'startDateTime:',typeof data.startDateTime !== 'string' ,  
+      'endDateTime:',typeof data.endDateTime !== 'string' ,  
+      'timeDuration:',typeof data.timeDuration ,  
+      'message:',typeof data.message !== 'string' ,  
+      'approverMessage:',typeof data.approverMessage !== 'string' ,  
+      'locked:',typeof data.locked !== 'string' ,  
+      'timeOffGroup:',typeof data.timeOffGroup !== 'string')*/
   // validation
   if (typeof data.requestedBy !== 'string'  || 
       typeof data.approvedBy !== 'string'  || 
       typeof data.timeState !== 'string'  || 
       typeof data.startDateTime !== 'string' ||  
       typeof data.endDateTime !== 'string' ||  
-      typeof data.timeDuration !== 'object' ||  
+      typeof data.timeDuration !== 'number' ||  
       typeof data.message !== 'string' ||  
       typeof data.approverMessage !== 'string' ||  
-      typeof data.locked !== 'string' ||  
-      //typeof data.timeType !== 'string' ||  
+      typeof data.locked !== 'string' ||   
       typeof data.timeOffGroup !== 'string') {
 
     console.error('Validation Failed');
@@ -216,7 +226,7 @@ console.log(typeof data.requestedBy !== 'string'  ,
   }
 
   const params = {
-    TableName: 'Request',
+    TableName: 'RequestNewPTO',
     Key: {
       requestid: event.pathParameters.requestid,
     },
@@ -231,7 +241,6 @@ console.log(typeof data.requestedBy !== 'string'  ,
       ':message': data.message,
       ':approverMessage': data.approverMessage,
       ':locked': data.locked,
-      //':timeType': data.timeType,
       ':timeOffGroup': data.timeOffGroup,
       ':dateModified': timestamp
     },

@@ -10,16 +10,23 @@ angular.module('ptoApp')
                 $scope.loggedIn = result;
             });
         }
-
+        $scope.getPercentUsed = function(){
+            if(typeof $rootScope.employee === 'undefined' || typeof $rootScope.employee.totalTimeUsed === 'undefined' || typeof $rootScope.employee.totalTimeAccrued === 'undefined') return 0;
+            var percentage = ($rootScope.employee.totalTimeUsed/$rootScope.employee.totalTimeAccrued)*100;
+            console.log(percentage)
+            return (percentage > 100) ?  100 : percentage;
+        }
 
     }])
 ////////div contains everything, deals with signed in employee
-    .controller('ContainerController', ['$scope', '$rootScope', '$state','$window', 'employeeFactory', 'employeeTestFactory', function ($scope, $rootScope, $state, $window, employeeFactory, employeeTestFactory) {
+    .controller('ContainerController', ['$scope', '$rootScope', '$state','$window', '$location','employeeFactory', 'employeeTestFactory', function ($scope, $rootScope, $state, $window,$location, employeeFactory, employeeTestFactory) {
+        $rootScope.callRequests=function(){};
+        $rootScope.callInfo=function(){};
         if(typeof $rootScope.gapi !== "undefined")gapi.load('client:auth2', initClient);
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
-            console.log(typeof $rootScope.gapi);
-            //if(typeof $rootScope.gapi == "undefined") return;
-                gapi.load('client:auth2', initClient);
+
+            if(typeof $rootScope.gapi === "undefined") return;
+            gapi.load('client:auth2', initClient);
         })
         $scope.$state = $state;
         $window.initGapi = function() {
@@ -53,6 +60,8 @@ angular.module('ptoApp')
             // If the signin status is changed to signedIn, we make an API call.
             if (isSignedIn) {
                 getEmailAddress();
+            }else{
+                $state.go('app');
             }
 
         }
@@ -81,26 +90,21 @@ angular.module('ptoApp')
                 $rootScope.email = response.result.emailAddresses[0].value;
                 $rootScope.callRequests();
                 $rootScope.callInfo();
-                if($rootScope.triggerSecond)$rootScope.triggerSecond();
+                //if($rootScope.triggerSecond)$rootScope.triggerSecond();
                 employeeTestFactory.get($rootScope.email).then(function(message) {
-                    console.log("This is a message!:!:!:!:"+message.firstName)
+                    console.log($location.path())
+                    if(typeof message.employeeid === "undefined"){
+                        $state.go('app');
+                    }else if($location.path() === "/"){
+                        $state.go('app.employee');
+                        $rootScope.employee = message;
+                        console.log("Coming from root!:!:!:!:"+message.firstName, message.employeeid)
+                    }else{
+                        $rootScope.employee = message;
+                        console.log("direct link!:!:!:!:"+message.firstName, message.employeeid)
+                    }
                 });
 
-
-
-                employeeFactory.get(
-                    {employeeid: $rootScope.email},
-                    function (response) {
-                        $rootScope.employee = response;
-                        $scope.employeeType = response.employeeType;
-                        $scope.employee.push({employeeid: response.employeeid, employeeType: response.employeeType});
-
-                    },
-                    function (response) {
-                        console.log(response)
-                        $scope.message = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
             }, function(reason) {
                 console.log('Error: ' + reason.result.error.message);
             });
@@ -111,7 +115,6 @@ angular.module('ptoApp')
 
 /////////Login
     .controller('LoginController', ['$scope', '$state', '$window', '$http','$rootScope', '$timeout', 'GooglePlus', 'gapiService', function ($scope, $state, $window, $http, $rootScope, $timeout, GooglePlus, gapiService) {
-
 
         $scope.$state = $state;
         $scope.callme = function(){
@@ -144,7 +147,6 @@ angular.module('ptoApp')
             var code = urlWithCode.substring(idx + 5).replace("#","");
 
             $http.get("token?code=" + code).then(function(response) {
-                //console.log("im response: "+response.data.access_token);
                 var userurl = 'https://www.googleapis.com/plus/v1/people/me?access_token='+response.data.access_token;
                 $http.get(userurl).then(function(response) {
                     console.log("user info: "+JSON.stringify(response.data));
@@ -156,52 +158,78 @@ angular.module('ptoApp')
     }]) 
 
 ///////Request page
-    .controller('RequestController', ['$scope', '$state', '$rootScope', 'requestFactory', 'employeeRequestFactory', 'timeOffGroupTestFactory', 'timeStateTestFactory', function ($scope, $state, $rootScope, requestFactory, employeeRequestFactory, timeOffGroupTestFactory, timeStateTestFactory) {
+    .controller('RequestController', ['$scope', '$state', '$rootScope', '$stateParams','requestFactory', 'employeeRequestFactory', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'approverProperties', function ($scope, $state, $rootScope, $stateParams, requestFactory, employeeRequestFactory, timeOffGroupTestFactory, timeStateTestFactory, approverProperties) {
         $scope.requests = [];
         $scope.timeStates = [];
         $scope.timeOffGroups = [];
-
-        /*employeeFactory.update(
-                {employeeid: obj.id}, {timeType: obj.entityValue}
-            );*/
+        console.log($rootScope.gapi)
+        if($rootScope.gapi){
+            $scope.requests = [];
+            $scope.timeStates = [];
+            $scope.timeOffGroups = [];
+            $rootScope.callRequests();
+        }
         $rootScope.callRequests=function(){
             timeOffGroupTestFactory.query().then(function(result) {
                 $scope.timeOffGroups = result 
             }).then(function(result){
                 timeStateTestFactory.query().then(function(result) {
-                    console.log(result);
                     $scope.timeStates = result 
-                })
-            }).then(function(result){
-                employeeRequestFactory.query(
-                    {employeeid: $rootScope.email}, 
-                    function (response) {
-                        response.forEach(function(r, index){
-                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, status:r.status, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"view"}
-                            $scope.timeOffGroups.forEach(function(tog, index2){
-                                if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
-                                    newValue.timeOffGroupColor = tog.timeOffGroupColor;
-                                }
+                }).then(function(res){
+                    employeeRequestFactory.query(
+                        {employeeid: $rootScope.email}, 
+                        function (response) {
+                            response.forEach(function(r, index){
+                                var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, startDateTime: r.startDateTime, endDateTime: r.endDateTime,  timeDuration: r.timeDuration, message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"view"}
+                                $scope.timeOffGroups.forEach(function(tog, index2){
+                                    if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
+                                        newValue.timeOffGroupColor = tog.timeOffGroupColor;
+                                    }
+                                })
+                                $scope.timeStates.forEach(function(ts, index3){
+                                    if(r.timeState.toLowerCase() == ts.timeState.toLowerCase()){
+                                        newValue.timeStateColor = ts.timeStateColor;
+                                    }
+                                })
+                                $scope.requests.push(newValue);
+
                             })
-                            $scope.timeStates.forEach(function(ts, index3){
-                                if(r.timeState.toLowerCase() == ts.timeState.toLowerCase()){
-                                    newValue.timeStateColor = ts.timeStateColor;
-                                }
-                            })
-                            $scope.requests.push(newValue);
-
-                        })
-                    },
-                    function (response) {
-                        console.log(response)
-                        $scope.message = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
-            }) 
-
-
+                            approverProperties.setRequests($scope.requests);
+                            $scope.calculateUsed();
+                            console.log("rootScope value: "+$rootScope.employee.employeeid)
+                        },
+                        function (response) {
+                            console.log(response)
+                            $scope.message = "Error: " + response.status + " " + response.statusText;
+                        }
+                    );
+                }) 
+            })
         }
 
+        $scope.calculateUsed = function(){
+            
+            $scope.timeUsed = 0;
+            $rootScope.employee.timePending = 0;
+            angular.forEach($scope.requests, function(key, value){
+                var td = key.timeDuration;
+                console.log(td);
+                if(key.timeState === "pending"){
+                    $rootScope.employee.timePending += Number(td);
+                }else{
+                    
+                    $scope.timeUsed += Number(td);
+                }
+            });
+            
+            
+            
+            if($rootScope.employee.totalTimeUsed !== $scope.timeUsed){
+                $rootScope.employee.totalTimeUsed = $scope.timeUsed;
+            }
+        }
+        
+        
 
         $scope.deleteDB = function(obj){
             requestFactory.delete(
@@ -210,21 +238,76 @@ angular.module('ptoApp')
         };
 
         $scope.addDB = function(obj){
+            $scope.timeOffGroups.forEach(function(tog, index2){
+                if(obj.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
+                    obj.timeOffGroupColor = tog.timeOffGroupColor;
+                }
+            })
+            $scope.timeStates.forEach(function(ts, index3){
+                if(obj.timeState.toLowerCase() == ts.timeState.toLowerCase()){
+                    obj.timeStateColor = ts.timeStateColor;
+                }
+            })
             requestFactory.save(
                 {}, {"requestedBy": $rootScope.email,
-                     "approvedBy": "&",
+                     "approvedBy": " ",
                      "startDateTime": obj.startDateTime,
                      "endDateTime": obj.endDateTime,
                      "timeDuration": obj.timeDuration,
                      "message": obj.message,
-                     "approverMessage": "&",
+                     "approverMessage": " ",
                      "locked": "false",
                      "timeState":"pending",
-                     "timeType":obj.timeType,
                      "timeOffGroup":obj.timeOffGroup}
             );
         };
 
+        $scope.updateDB = function(obj){
+
+            requestFactory.update(
+                {requestid: obj.requestid}, {"requestedBy": $rootScope.email,
+                                             "approvedBy": obj.approvedBy,
+                                             "startDateTime": obj.startDateTime,
+                                             "endDateTime": obj.endDateTime,
+                                             "timeDuration": obj.timeDuration,
+                                             "message": obj.message,
+                                             "approverMessage": obj.approverMessage,
+                                             "locked": obj.locked,
+                                             "timeState":obj.timeState,
+                                             "timeOffGroup":obj.timeOffGroup}
+            );
+        };
+
+        $scope.addRequest = function(){
+            $scope.requests.unshift({"requestedBy": $rootScope.email,
+                                     "approvedBy": "",
+                                     "startDateTime": '05-April-2017',
+                                     "endDateTime": new Date(),
+                                     "timeDuration": 8,
+                                     "message": "",
+                                     "approverMessage": "",
+                                     "locked": "false",
+                                     "timeState":"pending",
+                                     "timeOffGroup":"",
+                                     cardState:"add"});
+        }
+
+    }])
+    .controller('SecondRequestController', ['$scope', '$rootScope', '$state', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'requestFactory', 'approverProperties', function ($scope, $rootScope, $state, timeOffGroupTestFactory, timeStateTestFactory, requestFactory, approverProperties) {
+        $scope.tab = 1;
+        $scope.filtText = '';
+        $scope.showDetails = false;
+        $scope.showDelete = false;
+        $scope.showMenu = false;
+        $scope.displaySection = true;
+        $scope.message = "Loading ...";
+        $scope.requests = [];
+        $scope.timeStates = [];
+        $scope.timeOffGroups = [];
+
+        $scope.$watch(approverProperties.getRequests, function (val) { 
+            $scope.requests = val;
+        }.bind(this));
         $scope.updateDB = function(obj){
             requestFactory.update(
                 {requestid: obj.requestid}, {"requestedBy": $rootScope.email,
@@ -236,74 +319,9 @@ angular.module('ptoApp')
                                              "approverMessage": obj.approverMessage,
                                              "locked": obj.locked,
                                              "timeState":obj.timeState,
-                                             "timeType":obj.timeType,
                                              "timeOffGroup":obj.timeOffGroup}
             );
         };
-
-        $scope.addRequest = function(){
-            $scope.requests.unshift({"requestedBy": $rootScope.email,
-                                     "approvedBy": "",
-                                     "status": "pending",
-                                     "startDateTime": '05-April-2017',
-                                     "endDateTime": new Date(),
-                                     "timeDuration": 8,
-                                     "message": "",
-                                     "approverMessage": "",
-                                     "locked": "false",
-                                     "timeState":"pending",
-                                     "timeType":"single day",
-                                     "timeOffGroup":"",
-                                     cardState:"add"});
-        }
-
-    }])
-    .controller('SecondRequestController', ['$scope', '$rootScope', '$state', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'employeeRequestFactory', function ($scope, $rootScope, $state, timeOffGroupTestFactory, timeStateTestFactory, employeeRequestFactory) {
-        $scope.tab = 1;
-        $scope.filtText = '';
-        $scope.showDetails = false;
-        $scope.showDelete = false;
-        $scope.showMenu = false;
-        $scope.message = "Loading ...";
-        $scope.requests = [];
-        $scope.timeStates = [];
-        $scope.timeOffGroups = [];
-        $rootScope.triggerSecond=function(){
-            timeOffGroupTestFactory.query().then(function(result) {
-                $scope.timeOffGroups = result 
-            }).then(function(result){
-                timeStateTestFactory.query().then(function(result) {
-                    $scope.timeStates = result 
-                })
-            }).then(function(result){
-                employeeRequestFactory.query(
-                    {employeeid: $rootScope.email}, 
-                    function (response) {
-                        response.forEach(function(r, index){
-                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, status:r.status, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"view"}
-                            $scope.timeOffGroups.forEach(function(tog, index2){
-                                if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
-                                    newValue.timeOffGroupColor = tog.timeOffGroupColor;
-                                }
-                            })
-                            $scope.timeStates.forEach(function(ts, index3){
-                                if(r.timeState.toLowerCase() == ts.timeState.toLowerCase()){
-                                    newValue.timeStateColor = ts.timeStateColor;
-                                }
-                            })
-                            $scope.requests.push(newValue);
-
-                        })
-                    },
-                    function (response) {
-                        console.log(response)
-                        $scope.message = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
-            }) 
-        }
-        /*timeType: 'daily', //hourly, multiple, daily, editNew, edit
-                timeState: 'pending'//approved, denied*/
     }])
 
 ////////////Approver Page
@@ -313,12 +331,10 @@ angular.module('ptoApp')
         $scope.timeOffGroups = [];
         $scope.employeeSelect = 'none';
 
-
         $scope.changeEmployee = function(){
             approverProperties.setEmployeeSelect($scope.employeeSelect.employeeid);
             //console.log("from InfoApproverController:"+approverProperties.getEmployeeSelect())
         }
-
 
         $rootScope.callRequests=function(){   
             timeOffGroupTestFactory.query().then(function(result) {
@@ -344,13 +360,15 @@ angular.module('ptoApp')
         $rootScope.callRequests();
     }])
     .controller('BodyApproverController', ['$scope', '$state', '$rootScope', 'requestFactory', 'employeeRequestFactory', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'approverProperties', function ($scope, $state, $rootScope, requestFactory, employeeRequestFactory, timeOffGroupTestFactory, timeStateTestFactory, approverProperties) {
-        $rootScope.callRequests=function(){};
-        $rootScope.callInfo=function(){};
+
+        $scope.displaySection = true;
 
         $scope.$watch(approverProperties.getEmployeeSelect, function (change) { 
             console.log("Get Change:"+change);
         }.bind(this));
-
+        $scope.hideSession = function(){
+            $scope.displaySection = !$scope.displaySection;
+        }
         $scope.getEmployee = function(){
             return approverProperties.getEmployeeSelect();
         }
@@ -361,18 +379,20 @@ angular.module('ptoApp')
 
         $rootScope.callRequests=function(){
             timeOffGroupTestFactory.query().then(function(result) {
+                console.log("time off group:"+result);
                 $scope.timeOffGroups = result 
             }).then(function(result){
                 timeStateTestFactory.query().then(function(result) {
-                    console.log(result);
-                    $scope.timeStates = result 
+                    console.log("time state test:"+result);
+                    $scope.timeStates = result;
                 })
             }).then(function(result){
                 requestFactory.query(
                     {}, 
                     function (response) {
+
                         response.forEach(function(r, index){
-                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, status:r.status, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"review"}
+                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"review"}
                             $scope.timeOffGroups.forEach(function(tog, index2){
                                 if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
                                     newValue.timeOffGroupColor = tog.timeOffGroupColor;
@@ -386,6 +406,8 @@ angular.module('ptoApp')
                             $scope.requests.push(newValue);
 
                         })
+                        console.log("gotta get results: "+$scope.requests)
+                        approverProperties.setRequests($scope.requests);
                     },
                     function (response) {
                         console.log(response)
@@ -406,17 +428,20 @@ angular.module('ptoApp')
                                              "approverMessage": obj.approverMessage,
                                              "locked": obj.locked,
                                              "timeState":obj.timeState,
-                                             "timeType":obj.timeType,
                                              "timeOffGroup":obj.timeOffGroup}
             );
+
+            approverProperties.setRequests($scope.requests);
         };
     }])
     .controller('SecondBodyApproverController', ['$scope', '$rootScope', '$state', 'timeOffGroupTestFactory', 'timeStateTestFactory', 'requestFactory', 'approverProperties', function ($scope, $rootScope, $state, timeOffGroupTestFactory, timeStateTestFactory, requestFactory, approverProperties)  {
         $scope.tab = 1;
         $scope.filtText = '';
         $scope.showDetails = false;
+        $scope.displaySection = true;
         $scope.showDelete = false;
         $scope.showMenu = false;
+        $scope.displaySection = true;
         $scope.message = "Loading ...";
         $scope.requests = [];
         $scope.timeStates = [];
@@ -425,9 +450,8 @@ angular.module('ptoApp')
 
         $scope.selectEmpIDMatch = function( criteria ) {
             return function( item ) {
-                console.log(item.requestedBy, criteria)
-                if(criteria ==="none")return true;
-                return (item.requestedBy === criteria) && (item.timeState != 'pending');
+                if(criteria ==="none" && item.timeState != 'pending')return true;
+                return ((item.requestedBy === criteria) && (item.timeState != 'pending'));
             };
         };
 
@@ -435,12 +459,26 @@ angular.module('ptoApp')
             $scope.selectEmpID = change;
             console.log("Get Change:"+change);
         }.bind(this));
+        $scope.hideSession = function(){
+            $scope.displaySection = !$scope.displaySection;
+        }
+        /*$scope.$watch(approverProperties.getUpdateItem, function (change) { 
+            if(approverProperties.getUpdateItem == true){
+                approverProperties.getUpdateItem == false;
+            }
+        }.bind(this));*/
+
+
+        $scope.$watch(approverProperties.getRequests, function (val) { 
+            $scope.requests = val;
+        }.bind(this));
+
 
         $scope.getEmployee = function(){
             return approverProperties.getEmployeeSelect();
         }
 
-        $rootScope.triggerSecond=function(){
+        /*$rootScope.triggerSecond=function(){
             timeOffGroupTestFactory.query().then(function(result) {
                 $scope.timeOffGroups = result 
             }).then(function(result){
@@ -454,7 +492,7 @@ angular.module('ptoApp')
                     function (response) {
                         console.log("requests:"+response)
                         response.forEach(function(r, index){
-                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, status:r.status, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"review"}
+                            var newValue = {requestid: r.requestid, requestedBy: r.requestedBy, approvedBy: r.approvedBy, startDateTime: r.startDateTime, endDateTime: r.endDateTime, timeDuration: Number(r.timeDuration), message: r.message, approverMessage: r.approverMessage, locked: r.locked, timeState: r.timeState, timeOffGroup: r.timeOffGroup, cardState:"review"}
                             $scope.timeOffGroups.forEach(function(tog, index2){
                                 if(r.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
                                     newValue.timeOffGroupColor = tog.timeOffGroupColor;
@@ -475,7 +513,7 @@ angular.module('ptoApp')
                     }
                 );
             }) 
-        }
+        }*/
 
         $scope.updateDB = function(obj){
             requestFactory.update(
@@ -483,27 +521,28 @@ angular.module('ptoApp')
                                              "approvedBy": obj.approvedBy,
                                              "startDateTime": obj.startDateTime,
                                              "endDateTime": obj.endDateTime,
-                                             "timeDuration": 0,
+                                             "timeDuration": obj.timeDuration,
                                              "message": obj.message,
                                              "approverMessage": obj.approverMessage,
                                              "locked": obj.locked,
                                              "timeState":obj.timeState,
-                                             "timeType":"none",
                                              "timeOffGroup":obj.timeOffGroup}
             );
         };
     }])
 
 ///////Admin pages
-.controller('InfoAdminController', ['$scope', '$state','$rootScope', 'employeeTestFactory', function ($scope, $state, $rootScope, employeeTestFactory) {
+    .controller('InfoAdminController', ['$scope', '$state','$rootScope', 'employeeTestFactory', function ($scope, $state, $rootScope, employeeTestFactory) {
         $scope.loggedIn = {};
-    $rootScope.callRequests=function(){};
-        $rootScope.callInfo=function(){};
+
         $rootScope.callInfo=function(){
             employeeTestFactory.get($rootScope.email).then(function(result) {
                 $scope.loggedIn = result;
             });
         }
+        $scope.stateis = function(curstate) {
+            return $state.is(curstate);  
+        };
 
 
     }])
@@ -540,8 +579,11 @@ angular.module('ptoApp')
 
         $scope.deleteDB = function(obj){
             timeStateFactory.delete(
-                {timestateid: obj.id}
+                {timestateid: obj}
             );
+            $scope.timeState.forEach(function(r, index){
+                if($scope.timeState[index].id === obj) $scope.timeState.splice(index, 1);
+            });
         };
 
         $scope.addDB = function(obj){
@@ -556,7 +598,7 @@ angular.module('ptoApp')
             );
         };
     }])
-    .controller('TimeTypeAdminController', ['$scope', '$state', 'timeTypeFactory', function ($scope, $state, timeTypeFactory) {
+/*.controller('TimeTypeAdminController', ['$scope', '$state', 'timeTypeFactory', function ($scope, $state, timeTypeFactory) {
         $scope.timeType = [];
         timeTypeFactory.query(
             function (response) {
@@ -594,16 +636,15 @@ angular.module('ptoApp')
                 {}, {timeType: obj.entityValue}
             );
         };
-    }])
+    }])*/
     .controller('TimeOffGroupAdminController', ['$scope','$rootScope', '$state', 'timeOffGroupTestFactory', 'timeOffGroupFactory', function ($scope, $rootScope, $state, timeOffGroupTestFactory, timeOffGroupFactory) {
         $scope.timeOffGroup = [];
-        $rootScope.callRequests=function(){};
-        $rootScope.callInfo=function(){};
         timeOffGroupTestFactory.query().then(function(result) {
             result.forEach(function(r, index){
+                console.log(r.timeoffgroupid);
                 $scope.timeOffGroup.push({id: r.timeoffgroupid, entityValue: r.timeOffGroup, entityColor: r.timeOffGroupColor, cardState:"view"});
 
-            })   
+            })  
         });
 
         $scope.addNew = function(){
@@ -612,8 +653,11 @@ angular.module('ptoApp')
 
         $scope.deleteDB = function(obj){
             timeOffGroupFactory.delete(
-                {timeoffgroupid: obj.id}
+                {timeoffgroupid: obj}
             );
+            $scope.timeOffGroup.forEach(function(r, index){
+                if($scope.timeOffGroup[index].id === obj) $scope.timeOffGroup.splice(index, 1);
+            });
         };
 
         $scope.updateDB = function(obj){
@@ -636,7 +680,7 @@ angular.module('ptoApp')
         employeeFactory.query(
             function (response) {
                 response.forEach(function(r, index){
-                    $scope.employees.push({cardState:"view",employeeid: r.employeeid, firstName: r.firstName, lastName:r.lastName, totalTimeAccrued: r.totalTimeAccrued, totalTimeUsed: r.totalTimeUsed});
+                    $scope.employees.push({cardState:"view",employeeid: r.employeeid, firstName: r.firstName, lastName:r.lastName, totalTimeAccrued: r.totalTimeAccrued, totalTimeUsed: r.totalTimeUsed, employeeType: r.employeeType, employeeStartDate: r.employeeStartDate});
 
                 })
             },
@@ -660,9 +704,9 @@ angular.module('ptoApp')
         };
 
         $scope.updateDB = function(obj){
-
+            console.log("first name: ",obj.firstName, "lastName:",obj.lastName, "totalTimeAccrued:", obj.totalTimeAccrued, "totalTimeUsed:", obj.totalTimeUsed, "employeeType: ",obj.employeeType, "employeeStartDate", obj.employeeStartDate)
             employeeFactory.update(
-                {employeeid: obj.id}, {timeType: obj.entityValue}
+                {employeeid: obj.employeeid}, {firstName: obj.firstName, lastName:obj.lastName, totalTimeAccrued: obj.totalTimeAccrued, totalTimeUsed: obj.totalTimeUsed, employeeType: obj.employeeType, employeeStartDate: obj.employeeStartDate}
             );
         };
     }])

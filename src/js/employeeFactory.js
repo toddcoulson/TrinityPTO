@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ptoApp')
-    .constant("baseURLEmployee", "https://jhwhb4l88l.execute-api.us-east-1.amazonaws.com/dev/")
+    .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
 
     .factory('employeeTestFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {
         // $resource definition here

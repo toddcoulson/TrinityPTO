@@ -22,7 +22,14 @@ angular.module('ptoApp').directive('userCard', ["$filter", function ($filter) {
             
             $scope.cardobj.employeeStartDate = new Date($scope.cardobj.employeeStartDate);
             
-            
+            $scope.submit=function(){
+                if($scope.cardobj.cardState === 'edit'){
+                    $scope.updatedb({value: $scope.cardobj});
+                } else if($scope.cardobj.cardState === 'add'){
+                    $scope.adddb({value: $scope.cardobj});
+                }
+                $scope.cardobj.cardState = "view";
+            }
             $scope.inlineOptions = {
                 customClass: getDayClass,
                 minDate: new Date(),

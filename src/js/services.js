@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('ptoApp')
-    .constant("baseURLEmployee", "https://jhwhb4l88l.execute-api.us-east-1.amazonaws.com/dev/")
+    .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLEmployeeType", "https://313eil8vh4.execute-api.us-east-1.amazonaws.com/dev/")
-    .constant("baseURLRequest", "https://nqehj2871e.execute-api.us-east-1.amazonaws.com/dev/")
+    .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLTimeOffGroup", "https://pwqlomgq89.execute-api.us-east-1.amazonaws.com/dev/")
-    .constant("baseURLTimeType", "https://jq2npw66ai.execute-api.us-east-1.amazonaws.com/dev/")
+    //.constant("baseURLTimeType", "https://jq2npw66ai.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLTimeState", "https://hmmoye191c.execute-api.us-east-1.amazonaws.com/dev/")
 
     .factory('employeeFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {
@@ -65,7 +65,7 @@ angular.module('ptoApp')
     }])
 
 
-    .factory('timeTypeFactory', ['$resource', 'baseURLTimeType', function ($resource, baseURLTimeType) {
+    /*.factory('timeTypeFactory', ['$resource', 'baseURLTimeType', function ($resource, baseURLTimeType) {
         return $resource(baseURLTimeType + "timetype/:timetypeid", {timetypeid:"@timetypeid"}, {
             'get':    {method:'GET'},
             'save':   {method:'POST'},
@@ -74,7 +74,7 @@ angular.module('ptoApp')
             'delete': {method:'DELETE'},
             'update': {method:'PUT'}
         });
-    }])
+    }])*/
 
 .factory('timeStateFactory', ['$resource', 'baseURLTimeState', function ($resource, baseURLTimeState) {
         return $resource(baseURLTimeState + "timestate/:timestateid", {timestateid:"@timestateid"}, {
@@ -89,19 +89,30 @@ angular.module('ptoApp')
 
     .service('approverProperties', [ '$rootScope', function ($rootScope) {
     var employeeSelect = 'none';
-
-    var observerCallbacks = [];
-
-    //call this when you know 'foo' has been changed
-
+    var updateItem = false;
+    var requests = [];
     return {
-
+        getRequests: function () {
+            return requests;
+        },
+        setRequests: function(value) {
+            requests = value;
+            $rootScope.$broadcast('requests:updated',requests);
+        },
         getEmployeeSelect: function () {
             return employeeSelect;
         },
         setEmployeeSelect: function(value) {
             employeeSelect = value;
             $rootScope.$broadcast('select:updated',employeeSelect);
+        },
+        
+        getUpdateItem: function () {
+            return updateItem;
+        },
+        setUpdateItem: function(value) {
+            updateItem = value;
+            $rootScope.$broadcast('select:approvals',updateItem);
         }
     };
 }]);

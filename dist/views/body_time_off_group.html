@@ -1,6 +1,9 @@
-<div><a href="" class="" ng-click="addNew()"><i class="fa fa-plus" aria-hidden="true"></i></a>
-</div>
+<div class="sectionTable">
+    <div>
+        <a href="" class="" ng-click="addNew()"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
 
-<div ng-repeat="tog in timeOffGroup track by $index" >
-<color-change-card cardtitle="Time Off Group" cardobj="tog" data-update="updateDB(value)" delete="deleteDB(value)"></color-change-card>
+    <div ng-repeat="tog in timeOffGroup track by $index" >
+        <color-change-card class="requestCard" cardtitle="Time Off Group" cardobj="tog" data-update="updateDB(value)" delete="deleteDB(value)"></color-change-card>
+    </div>
 </div>

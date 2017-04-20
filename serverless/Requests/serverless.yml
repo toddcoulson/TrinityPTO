@@ -5,6 +5,7 @@ service: requests
 
 provider:
   name: aws
+  stage: dev
   runtime: nodejs4.3
   iamRoleStatements:
     - Effect: "Allow"
@@ -14,7 +15,7 @@ provider:
 
 
 functions:
-  createRequest:
+  createRequestNewPTO:
     handler: request.create
     events:
       - http:
@@ -22,7 +23,7 @@ functions:
           method: post
           cors: true
 
-  listRequest:
+  listRequestNewPTO:
     handler: request.list
     events:
       - http:
@@ -30,7 +31,7 @@ functions:
           method: get
           cors: true
 
-  getRequest:
+  getRequestNewPTO:
     handler: request.get
     events:
       - http:
@@ -41,7 +42,7 @@ functions:
             parameters:
               paths:
                 requestid: true
-  getEmployeeRequests:
+  getEmployeeRequestNewPTO:
     handler: request.getEmployeeRequests
     events:
       - http:
@@ -52,7 +53,7 @@ functions:
             parameters:
               paths:
                 employeeid: true
-  getApproverRequests:
+  getApproverRequestNewPTO:
     handler: request.getApproverRequests
     events:
       - http:
@@ -63,7 +64,7 @@ functions:
             parameters:
               paths:
                 employeeid: true
-  updateRequest:
+  updateRequestNewPTO:
     handler: request.update
     events:
       - http:
@@ -74,7 +75,7 @@ functions:
             parameters:
               paths:
                 requestid: true
-  deleteRequest:
+  deleteRequestNewPTO:
     handler: request.delete
     events:
       - http:
@@ -91,7 +92,7 @@ resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Request
+        TableName: RequestNewPTO
         AttributeDefinitions:
           - AttributeName: requestid
             AttributeType: S
@@ -144,6 +145,6 @@ resources:
                 - dynamodb:PutItem
                 - dynamodb:UpdateItem
                 - dynamodb:DeleteItem
-              Resource: arn:aws:dynamodb:*:*:table/Request
+              Resource: arn:aws:dynamodb:*:*:table/RequestNewPTO
         Roles:
           - Ref: IamRoleLambdaExecution

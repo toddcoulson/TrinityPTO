@@ -8,31 +8,31 @@
     "CreateEmployeeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/employees-dev-createEmployee"
+        "LogGroupName": "/aws/lambda/employeesNew-dev-createEmployee"
       }
     },
     "ListEmployeesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/employees-dev-listEmployees"
+        "LogGroupName": "/aws/lambda/employeesNew-dev-listEmployees"
       }
     },
     "GetEmployeesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/employees-dev-getEmployees"
+        "LogGroupName": "/aws/lambda/employeesNew-dev-getEmployees"
       }
     },
     "UpdateEmployeesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/employees-dev-updateEmployees"
+        "LogGroupName": "/aws/lambda/employeesNew-dev-updateEmployees"
       }
     },
     "DeleteEmployeesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/employees-dev-deleteEmployees"
+        "LogGroupName": "/aws/lambda/employeesNew-dev-deleteEmployees"
       }
     },
     "IamRoleLambdaExecution": {
@@ -54,132 +54,90 @@
             }
           ]
         },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dev",
+                  "employeesNew",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-createEmployee:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-listEmployees:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-getEmployees:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-updateEmployees:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-deleteEmployees:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-createEmployee:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-listEmployees:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-getEmployees:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-updateEmployees:*:*"
+                    },
+                    {
+                      "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/employeesNew-dev-deleteEmployees:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Action": [
+                    "dynamodb:*"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
         "Path": "/",
         "RoleName": {
           "Fn::Join": [
             "-",
             [
-              "employees",
+              "employeesNew",
               "dev",
               "us-east-1",
               "lambdaRole"
             ]
           ]
         }
-      }
-    },
-    "IamPolicyLambdaExecution": {
-      "Type": "AWS::IAM::Policy",
-      "DependsOn": [
-        "IamRoleLambdaExecution"
-      ],
-      "Properties": {
-        "PolicyName": {
-          "Fn::Join": [
-            "-",
-            [
-              "dev",
-              "employees",
-              "lambda"
-            ]
-          ]
-        },
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "CreateEmployeeLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "ListEmployeesLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "GetEmployeesLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "UpdateEmployeesLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    ":",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "DeleteEmployeesLogGroup",
-                          "Arn"
-                        ]
-                      },
-                      "*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Resource": "*",
-              "Action": [
-                "dynamodb:*"
-              ]
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "IamRoleLambdaExecution"
-          }
-        ]
       }
     },
     "CreateEmployeeLambdaFunction": {
@@ -189,9 +147,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
+          "S3Key": "serverless/employeesNew/dev/1492634322411-2017-04-19T20:38:42.411Z/employeesNew.zip"
         },
-        "FunctionName": "employees-dev-createEmployee",
+        "FunctionName": "employeesNew-dev-createEmployee",
         "Handler": "employee.create",
         "MemorySize": 1024,
         "Role": {
@@ -204,18 +162,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "CreateEmployeeLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "CreateEmployeeLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
+    "CreateEmployeeLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateEmployeeLambdaFunction"
         },
-        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
+        "CodeSha256": "OIlqzkRXut5Ll7bf5ZmOVKd/7nXS40cterjK7d/6wec="
       }
     },
     "ListEmployeesLambdaFunction": {
@@ -225,9 +183,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
+          "S3Key": "serverless/employeesNew/dev/1492634322411-2017-04-19T20:38:42.411Z/employeesNew.zip"
         },
-        "FunctionName": "employees-dev-listEmployees",
+        "FunctionName": "employeesNew-dev-listEmployees",
         "Handler": "employee.list",
         "MemorySize": 1024,
         "Role": {
@@ -240,18 +198,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "ListEmployeesLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "ListEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
+    "ListEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListEmployeesLambdaFunction"
         },
-        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
+        "CodeSha256": "OIlqzkRXut5Ll7bf5ZmOVKd/7nXS40cterjK7d/6wec="
       }
     },
     "GetEmployeesLambdaFunction": {
@@ -261,9 +219,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
+          "S3Key": "serverless/employeesNew/dev/1492634322411-2017-04-19T20:38:42.411Z/employeesNew.zip"
         },
-        "FunctionName": "employees-dev-getEmployees",
+        "FunctionName": "employeesNew-dev-getEmployees",
         "Handler": "employee.get",
         "MemorySize": 1024,
         "Role": {
@@ -276,18 +234,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "GetEmployeesLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "GetEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
+    "GetEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetEmployeesLambdaFunction"
         },
-        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
+        "CodeSha256": "OIlqzkRXut5Ll7bf5ZmOVKd/7nXS40cterjK7d/6wec="
       }
     },
     "UpdateEmployeesLambdaFunction": {
@@ -297,9 +255,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
+          "S3Key": "serverless/employeesNew/dev/1492634322411-2017-04-19T20:38:42.411Z/employeesNew.zip"
         },
-        "FunctionName": "employees-dev-updateEmployees",
+        "FunctionName": "employeesNew-dev-updateEmployees",
         "Handler": "employee.update",
         "MemorySize": 1024,
         "Role": {
@@ -312,18 +270,18 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "UpdateEmployeesLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "UpdateEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
+    "UpdateEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateEmployeesLambdaFunction"
         },
-        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
+        "CodeSha256": "OIlqzkRXut5Ll7bf5ZmOVKd/7nXS40cterjK7d/6wec="
       }
     },
     "DeleteEmployeesLambdaFunction": {
@@ -333,9 +291,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/employees/dev/1491849499181-2017-04-10T18:38:19.181Z/employees.zip"
+          "S3Key": "serverless/employeesNew/dev/1492634322411-2017-04-19T20:38:42.411Z/employeesNew.zip"
         },
-        "FunctionName": "employees-dev-deleteEmployees",
+        "FunctionName": "employeesNew-dev-deleteEmployees",
         "Handler": "employee.delete",
         "MemorySize": 1024,
         "Role": {
@@ -348,24 +306,24 @@
         "Timeout": 6
       },
       "DependsOn": [
-        "IamPolicyLambdaExecution",
+        "DeleteEmployeesLogGroup",
         "IamRoleLambdaExecution"
       ]
     },
-    "DeleteEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4": {
+    "DeleteEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteEmployeesLambdaFunction"
         },
-        "CodeSha256": "9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z/4="
+        "CodeSha256": "OIlqzkRXut5Ll7bf5ZmOVKd/7nXS40cterjK7d/6wec="
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-employees"
+        "Name": "dev-employeesNew"
       }
     },
     "ApiGatewayResourceEmployee": {
@@ -677,7 +635,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1491849499192": {
+    "ApiGatewayDeployment1492634322423": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -861,7 +819,7 @@
     "DynamoDbTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Employee",
+        "TableName": "EmployeesPTO",
         "AttributeDefinitions": [
           {
             "AttributeName": "employeeid",
@@ -898,7 +856,7 @@
                 "dynamodb:UpdateItem",
                 "dynamodb:DeleteItem"
               ],
-              "Resource": "arn:aws:dynamodb:*:*:table/Employee"
+              "Resource": "arn:aws:dynamodb:*:*:table/EmployeesPTO"
             }
           ]
         },
@@ -919,31 +877,31 @@
     "CreateEmployeeLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateEmployeeLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
+        "Ref": "CreateEmployeeLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec"
       }
     },
     "ListEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
+        "Ref": "ListEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec"
       }
     },
     "GetEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
+        "Ref": "GetEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec"
       }
     },
     "UpdateEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
+        "Ref": "UpdateEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec"
       }
     },
     "DeleteEmployeesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteEmployeesLambdaVersion9TSP6pwrnnJb2tPEQoYkvS57CycebnOmqBLbdd90Z4"
+        "Ref": "DeleteEmployeesLambdaVersionOIlqzkRXut5Ll7bf5ZmOVKd7nXS40cterjK7d6wec"
       }
     },
     "ServiceEndpoint": {

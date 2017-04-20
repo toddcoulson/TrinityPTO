@@ -8,15 +8,15 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse" ng-show="employeeType=='admin'">
             <ul class="nav navbar-nav">
-                <li ng-show=" employeeType=='admin'" ng-class="{active: stateis('app.admin')}"><a ui-sref="app.admin">
+                <li ng-class="{active: stateis('app.admin')}"><a ui-sref="app.admin">
                     <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Users</a></li>
-                <li ng-show=" employeeType=='admin'" ng-class="{active: stateis('app.adminTimeState')}"><a ui-sref="app.adminTimeState">
+                <li ng-class="{active: stateis('app.adminTimeState')}"><a ui-sref="app.adminTimeState">
                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Time State</a></li>
-                <li ng-show=" employeeType=='admin'" ng-class="{active: stateis('app.adminTimeType')}"><a ui-sref="app.adminTimeType">
-                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Time Type</a></li>
-                <li ng-show=" employeeType=='admin'" ng-class="{active: stateis('app.adminTimeOffGroup')}"><a ui-sref="app.adminTimeOffGroup">
+                <!--<li ng-class="{active: stateis('app.adminTimeType')}"><a ui-sref="app.adminTimeType">
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Time Type</a></li>-->
+                <li ng-class="{active: stateis('app.adminTimeOffGroup')}"><a ui-sref="app.adminTimeOffGroup">
                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Time Off Group</a></li>
             </ul>
         </div>

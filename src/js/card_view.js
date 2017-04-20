@@ -7,26 +7,150 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             deletedb: '&delete',
             adddb: '&add'
         },
-        controller: ['$scope','$element', '$attrs', '$location', '$injector', 'timeOffGroupTestFactory', 'timeTypeTestFactory', function ($scope, $element, $attrs, $location, $injector, timeOffGroupTestFactory, timeTypeTestFactory) {
+        link:function(scope, element, attrs, ctrl){                
+
+            scope.$watch(scope.cardobj, function(){
+                var sd = new Date(scope.cardobj.startDateTime);
+                var ed = new Date(scope.cardobj.endDateTime);
+                if(scope.cardobj.cardState !== 'edit' && scope.cardobj.cardState !== 'add'){
+                    scope.cardobj.timeDuration = ctrl.determineDays(sd, ed, sd, ed);
+                }
+
+            }, true);
+
+        },
+        controller: ['$scope','$element', '$attrs', '$location', '$injector', 'timeOffGroupTestFactory', 'timeStateTestFactory', function ($scope, $element, $attrs, $location, $injector, timeOffGroupTestFactory, timeStateTestFactory) {
             $scope.timeOffGroups = [];
             $scope.timeOffGroupSelect = {};
-            $scope.timeTypes = [];
-            $scope.timeTypeSelect = {};
+            $scope.timeStates = [];
+            $scope.timeStatesSelect = {};
             $scope.dates={};
-            $scope.dates.dt = new Date();
+            $scope.dates.dt1 = new Date();
             $scope.dates.dt2 = new Date();
             $scope.times={};
-            $scope.times.startTime = new Date(1970, 0, 1, 11, 00, 0);
-            $scope.times.endTime = new Date(1970, 0, 1, 11, 30, 0);
-            $scope.dt = new Date();
+            $scope.times.startTime = new Date(1970, 0, 1, 8, 30, 0);
+            $scope.times.endTime = new Date(1970, 0, 1, 9, 30, 0);
+            $scope.hstep = 1;
+            $scope.mstep = 15;
+            $scope.ismeridian = true;
+
+            $scope.determineDays = this.determineDays = function(start, end, startTime, endTime){
+                var cpStart = new Date(start);
+                var cpEnd = new Date(end);
+                var cpStartTime = new Date(startTime);
+                var cpEndTime = new Date(endTime);
+                var holiday = [
+                    new Date('2017-01-01T00:00:00Z'),
+                    new Date('2017-01-16T00:00:00Z'),
+                    new Date('2017-02-20T00:00:00Z'),
+                    new Date('2017-05-29T00:00:00Z'),
+                    new Date('2017-07-04T00:00:00Z'),
+                    new Date('2017-09-04T00:00:00Z'),
+                    new Date('2017-10-09T00:00:00Z'),
+                    new Date('2017-11-10T00:00:00Z'),
+                    new Date('2017-11-23T00:00:00Z'),
+                    new Date('2017-12-25T00:00:00Z')
+                ] 
+                var i = holiday.length
+                var n_days = 0;
+                var n_hours = 0;
+                while (i--) { // loop over holidays
+                    if (holiday[i] >= cpStart)
+                        if (holiday[i] <= cpEnd)
+                            n_days = n_days - 1; // day holiday within dates
+                }
+                while (cpStart <= cpEnd) {
+                    if (cpStart.getUTCDay() != 0 && cpStart.getUTCDay() != 6) n_days = n_days + 1; // not sunday
+                    cpStart.setUTCHours(24); // add a day
+                }
+
+
+
+                if(n_days>2){
+                    n_days = n_days -2;
+                    n_hours = n_days * 8;
+                }
+                if(n_days > 1){
+
+                    var eod = new Date(cpStartTime);
+                    eod.setHours(17, 0, 0);
+
+                    var startHours = eod - cpStartTime;
+                    n_hours += ((startHours/1000)/60)/60;
+
+
+                    var bod = new Date(cpEndTime);
+                    bod.setHours(9, 0, 0);
+                    var endHours = cpEndTime-bod;
+                    n_hours += ((endHours/1000)/60)/60;
+
+                }else if(n_days == 1){
+
+                    var giveHours = cpEndTime - cpStartTime;
+                    n_hours += ((giveHours/1000)/60)/60;
+                }
+                $scope.n_hours = n_hours;
+                return n_hours;
+            }
+
+
+            $scope.changeTime = function(){
+                console.log("start",$scope.times.startTime.getHours())
+                console.log("end",$scope.times.endTime.getHours())
+                if($scope.times.startTime.getHours() > 17){
+                    $scope.times.startTime = new Date(1970, 0, 1, 17, 00, 0);
+
+                }
+                if($scope.times.endTime.getHours() > 17){
+                    $scope.times.endTime= new Date(1970, 0, 1, 17, 00, 0);
+                }
+                if($scope.times.startTime.getHours() < 8){
+                    $scope.times.startTime = new Date(1970, 0, 1, 8, 00, 0);
+                }
+                if($scope.times.endTime.getHours() < 8){
+                    $scope.times.startTime = new Date(1970, 0, 1, 8, 00, 0);
+                }
+                $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
+                console.log($scope.n_hours)
+                if($scope.n_hours < 0 ){
+                    $scope.times.endTime = $scope.times.startTime;
+                }
+            }
 
             timeOffGroupTestFactory.query().then(function(result) {
                 $scope.timeOffGroups = result 
             }).then(function(result){
-                timeTypeTestFactory.query().then(function(result) {
-                    $scope.timeTypes = result 
+                timeStateTestFactory.query().then(function(result) {
+                    $scope.timeStates = result 
                 })
             });
+
+            $scope.$watch('dates.dt1', function (newValue, oldValue, scope) {
+                if(typeof $scope.cardobj != 'undefined')
+                    $scope.cardobj.timeDuration = $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
+            });
+            $scope.$watch('dates.dt2', function (newValue, oldValue, scope) {
+                if(typeof $scope.cardobj != 'undefined')$scope.cardobj.timeDuration = $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
+            });
+            $scope.$watch('times.endTime', function (newValue, oldValue, scope) {
+                if(typeof $scope.cardobj != 'undefined')$scope.cardobj.timeDuration = $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
+            });
+            $scope.$watch('times.startTime', function (newValue, oldValue, scope) {
+                if(typeof $scope.cardobj != 'undefined')$scope.cardobj.timeDuration = $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
+            });
+            /*
+            $scope.$watch('cardobj.startDateTime', function (newValue, oldValue, scope) {
+                if(cardobj.cardState !== 'edit' && cardobj.cardState !== 'add'){
+                    cardobj.timeDuration = $scope.determineDays(cardobj.startDateTime, cardobj.endDateTime, cardobj.startDateTime, cardobj.endDateTime);
+                }
+
+            });
+
+            $scope.$watch('cardobj.endDateTime', function (newValue, oldValue, scope) {
+
+                cardobj.timeDuration = $scope.determineDays(dates.dt1, dates.dt2, times.startTime, times.endTime);
+            });*/
+
 
             $scope.changeTimeType = function(){
                 $scope.cardobj.timeType = $scope.timeTypeSelect.timeType
@@ -56,36 +180,68 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                 $scope.cardobj.timeState = "denied";
                 $scope.updatedb({value: $scope.cardobj});
             }
-            
+
             $scope.close = function(){
                 $scope.deletedb({value: $scope.cardobj});
             }
-            
+
             $scope.edit = function(){
-                $scope.cardobj.cardState = "edit";
+                $scope.dates.dt1 = new Date($scope.cardobj.startDateTime);
+                $scope.dates.dt2 = new Date($scope.cardobj.endDateTime);
+                $scope.times.startTime = new Date($scope.cardobj.startDateTime);
+                $scope.times.endTime = new Date($scope.cardobj.endDateTime);
+                console.log(document.getElementById('selectTimeOffGroup'))
+                document.getElementById('selectTimeOffGroup').value=$scope.cardobj.timeOffGroup;
+                if($scope.cardobj.cardState == "review"){
+                    $scope.cardobj.cardState = "reviewedit";
+                }else{
+                    $scope.cardobj.cardState = "edit";
+                }
+
             }
 
             $scope.submit=function(){
-
-                $scope.cardobj.startDateTime = combineDateWithTime($scope.dates.dt,$scope.times.startTime);
-                $scope.cardobj.endDateTime = combineDateWithTime($scope.dates.dt2,$scope.times.endTime);
-
+                if($scope.cardobj.cardState === 'edit' || $scope.cardobj.cardState === 'add') {
+                    $scope.cardobj.startDateTime = combineDateWithTime($scope.dates.dt1,$scope.times.startTime);
+                    $scope.cardobj.endDateTime = combineDateWithTime($scope.dates.dt2,$scope.times.endTime);
+                }else if($scope.cardobj.cardState === 'reviewedit'){
+                    $scope.cardobj.startDateTime = combineDateWithTime($scope.dates.dt1,$scope.times.startTime);
+                    $scope.cardobj.endDateTime = combineDateWithTime($scope.dates.dt2,$scope.times.endTime);
+                }
                 if($scope.cardobj.cardState === 'edit'){
                     $scope.updatedb({value: $scope.cardobj});
                 } else if($scope.cardobj.cardState === 'add'){
                     $scope.adddb({value: $scope.cardobj});
-                    console.log($scope.adddb)
+                }else if($scope.cardobj.cardState === 'review'){
+                    $scope.updatedb({value: $scope.cardobj});
+                }
+
+                $scope.timeOffGroups.forEach(function(tog, index2){
+                    if($scope.cardobj.timeOffGroup.toLowerCase() == tog.timeOffGroup.toLowerCase()){
+                        $scope.cardobj.timeOffGroupColor = tog.timeOffGroupColor;
+                    }
+                })
+                $scope.timeStates.forEach(function(ts, index3){
+                    if($scope.cardobj.timeState.toLowerCase() == ts.timeState.toLowerCase()){
+                        $scope.cardobj.timeStateColor = ts.timeStateColor;
+                    }
+                })
+
+                if($scope.cardobj.cardState === 'edit' || $scope.cardobj.cardState === 'add') {
+                    $scope.cardobj.cardState = "view";
+                }else if($scope.cardobj.cardState === 'reviewedit'){
+                    $scope.cardobj.cardState = "review";
                 }
             }
 
             $scope.today = function() {
-                $scope.dates.dt = new Date();
+                $scope.dates.dt1 = new Date();
                 $scope.dates.dt2 = new Date();
             };
             $scope.today();
 
             $scope.clear = function() {
-                $scope.dates.dt = null;
+                $scope.dates.dt1 = null;
                 $scope.dates.dt2 = null;
             };
 
@@ -98,7 +254,7 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             $scope.dateOptions = {
                 dateDisabled: disabled,
                 formatYear: 'yy',
-                maxDate: $scope.dates.dt2,
+                maxDate: new Date(2020, 1, 1),
                 minDate: new Date(),
                 startingDay: 1
             };
@@ -106,8 +262,8 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             $scope.dateOptions2 = {
                 dateDisabled: disabled,
                 formatYear: 'yy',
-                maxDate: new Date(2020, 5, 22),
-                minDate: $scope.dates.dt,
+                maxDate: new Date(2020, 1, 1),
+                minDate: new Date(),
                 startingDay: 1
             };
 
@@ -123,20 +279,24 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                 $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
             };
 
-
-
             $scope.toggleMin();
+            $scope.checkDates = function(){
+                if($scope.dates.dt2 < $scope.dates.dt1){
+                    $scope.dates.dt2 = $scope.dates.dt1;
+                }
+            }
 
             $scope.open = function($event,opened) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
                 $scope[opened] = true;
-                $scope.dateOptions.maxDate = $scope.dates.dt2;
-                $scope.dateOptions2.minDate = $scope.dates.dt;
+                $scope.dateOptions.minDate = new Date();
+                $scope.dateOptions2.minDate = new Date();
+
             };
             $scope.minDate = function(){
-                return new Date($scope.dates.dt);
+                return new Date($scope.dates.dt1);
             }
 
             $scope.maxDate = function(){
@@ -144,7 +304,7 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
             }
 
             $scope.setDate = function(year, month, day) {
-                $scope.dates.dt = new Date(year, month, day);
+                $scope.dates.dt1 = new Date(year, month, day);
             };
 
             $scope.setDate2 = function(year, month, day) {

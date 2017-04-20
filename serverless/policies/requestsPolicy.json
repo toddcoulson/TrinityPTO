@@ -7,9 +7,8 @@
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
                 "logs:DescribeLogStreams",
-                "logs:FilterLogEvents",
-                "logs:DeleteRequestLogGroup",
-                "logs:UpdateRequestLogGroup"
+                "logs:DescribeLogGroups",
+                "logs:FilterLogEvents"
             ],
             "Resource": "arn:aws:logs:us-east-1:*:*",
             "Effect": "Allow"
@@ -21,6 +20,21 @@
             "Resource": "arn:aws:logs:us-east-1:*:*",
             "Effect": "Allow"
         },
+        {
+            "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:CreateTable"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        
         {
             "Effect":"Allow",
             "Action":[

@@ -12,7 +12,7 @@ module.exports.create = (event, context, callback) => {
   }
 
   const params = {
-    TableName: 'EmployeesPTO',
+    TableName: 'Employee',
     Item: {
       employeeid: data.employeeid,
       firstName: data.firstName,
@@ -21,7 +21,6 @@ module.exports.create = (event, context, callback) => {
       requests: data.requests,
       totalTimeUsed: data.totalTimeUsed,
       totalTimeAccrued: data.totalTimeAccrued,
-      employeeStartDate: data.employeeStartDate,
       dateCreated: timestamp,
       dateModified: timestamp
     },
@@ -50,7 +49,7 @@ module.exports.create = (event, context, callback) => {
 
 module.exports.list = (event, context, callback) => {
   const params = {
-      TableName: 'EmployeesPTO',
+      TableName: 'Employee',
     };
   dynamoDb.scan(params, (error, result) => {
     // handle potential errors
@@ -74,7 +73,7 @@ module.exports.list = (event, context, callback) => {
 
 module.exports.delete = (event, context, callback) => {
   const params = {
-    TableName: 'EmployeesPTO',
+    TableName: 'Employee',
     Key: {
       employeeid: event.pathParameters.employeeid,
     },
@@ -103,7 +102,7 @@ module.exports.delete = (event, context, callback) => {
 
 module.exports.get = (event, context, callback) => {
   const params = {
-    TableName: 'EmployeesPTO',
+    TableName: 'Employee',
     Key: {
       employeeid: event.pathParameters.employeeid,
     },
@@ -133,16 +132,16 @@ module.exports.get = (event, context, callback) => {
 module.exports.update = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  //console.log(typeof data.employeeid !== 'string' , typeof data.firstName !== 'string'  , typeof data.lastName !== 'string' ,typeof data.totalTimeUsed !== 'number'  , typeof data.totalTimeAccrued !== 'number' );
+  console.log(typeof data.employeeid !== 'string' , typeof data.firstName !== 'string'  , typeof data.lastName !== 'string' ,typeof data.totalTimeUsed !== 'number'  , typeof data.totalTimeAccrued !== 'number' );
   // validation
-  if (typeof data.firstName !== 'string'  || typeof data.lastName !== 'string'  || typeof data.totalTimeUsed !== 'number'  || typeof data.totalTimeAccrued !== 'number' || typeof data.employeeStartDate !== 'string' ) {
+  if (typeof data.employeeid !== 'string' || typeof data.firstName !== 'string'  || typeof data.lastName !== 'string'  || typeof data.totalTimeUsed !== 'number'  || typeof data.totalTimeAccrued !== 'number' ) {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t update the todo item.'));
     return;
   }
 
   const params = {
-    TableName: 'EmployeesPTO',
+    TableName: 'Employee',
     Key: {
       employeeid: event.pathParameters.employeeid,
     },
@@ -153,10 +152,9 @@ module.exports.update = (event, context, callback) => {
       ':employeeType': data.employeeType,
       ':totalTimeUsed': data.totalTimeUsed,
       ':totalTimeAccrued': data.totalTimeAccrued,
-      ':employeeStartDate': data.employeeStartDate,
       ':dateModified': timestamp
     },
-    UpdateExpression: 'SET firstName = :firstName, lastName = :lastName, employeeType = :employeeType, totalTimeUsed = :totalTimeUsed, totalTimeAccrued = :totalTimeAccrued, dateModified = :dateModified, employeeStartDate = :employeeStartDate',
+    UpdateExpression: 'SET firstName = :firstName, lastName = :lastName, employeeType = :employeeType, totalTimeUsed = :totalTimeUsed, totalTimeAccrued = :totalTimeAccrued, dateModified = :dateModified',
     ReturnValues: 'ALL_NEW',
   };
 

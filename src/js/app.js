@@ -91,7 +91,7 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                 }
             }
         })
-
+/*
             .state('app.adminTimeType', {
             url: 'admin/timeType',
             views: {
@@ -109,7 +109,7 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
                 }
             }
         })
-
+*/
             .state('app.adminTimeState', {
             url: 'admin/timestate',
             views: {

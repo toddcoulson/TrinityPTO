@@ -1,12 +1,11 @@
 
 Employee:
 {
-"employeeid": "another@gmail.com",
+"employeeid": "tcoulson@gmail.com",
       "firstName": "Todd",
       "lastName": "Coulson",
       "employeeType": "full-time",
-      "requests": [],
-      "totalHoursAllocated": 40,
+      "totalTimeUsed": 0,
       "totalTimeAccrued": 40
 }
 

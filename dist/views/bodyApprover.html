@@ -4,16 +4,14 @@
             <p class="sectionHeaderTitle">Current Employee Requests</p>         
         </div>
         <div class="col-sm-6 text-right">
-            <a href="" type="submit" class="commonIconBtn" ng-click="addRequest()">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-            <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
-                <i class="fa fa-eye" aria-hidden="true"></i>
+            <a href="" type="submit" class="commonIconBtn" ng-click="hideSession()">
+                <i ng-show="!displaySection" class="fa fa-eye" aria-hidden="true"></i>
+                <i ng-show="displaySection" class="fa fa-eye-slash" aria-hidden="true"></i>
             </a>
         </div>
     </div>
-    <div ng-repeat="req in requests | filter: { timeState: 'pending' }" >
-        <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
+    <div ng-show="displaySection" ng-repeat="req in requests | filter: { timeState: 'pending' }" >
+        <card-view class="requestCard" fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
     </div>
 </div>
 

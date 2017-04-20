@@ -12,9 +12,9 @@
             <p class="card-text textLabelCard">{{loggedIn.firstName}} {{loggedIn.lastName}}</p>
         </div>
         <div class="col-sm-6">
-            <p class="card-text textValueCard pull-right">{{loggedIn.totalTimeUsed}} hrs / {{loggedIn.totalTimeAccrued}} hrs</p>
+            <p class="card-text textValueCard pull-right">{{$root.employee.timePending}} pending hrs / {{$root.employee.totalTimeUsed}} used hrs / {{$root.employee.totalTimeAccrued}} available hrs</p>
         </div>
-
+        {{$rootScope.employee}}
     </div>
     <div class="row">
 
@@ -27,5 +27,9 @@
         </div>
 
     </div>
-
 </div>
+<div class="progressBar">
+        
+        <div class="available"></div>
+        <div class="used"  ng-style="{'width':getPercentUsed()+'%'}"></div>
+    </div>

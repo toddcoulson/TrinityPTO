@@ -19,6 +19,7 @@ angular.module('ptoApp').directive('colorChangeCard', ["$filter", function ($fil
                 } else if($scope.cardobj.cardState === 'add'){
                     $scope.adddb({value: $scope.cardobj});
                 }
+                $scope.cardobj.cardState = "view";
             }
             $scope.editColor = function(){
                 $scope.cardobj.cardState === 'edit' ? $scope.cardobj.cardState = 'view': $scope.cardobj.cardState = 'edit';

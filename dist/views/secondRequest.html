@@ -10,6 +10,6 @@
         </div>
     </div>
     <div ng-repeat="req in requests | filter: { timeState: '!pending' }" >
-        <card-view fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
+        <card-view class="requestCard" fcardobj="req" data-update="updateDB(value)" data-delete="deleteDB(value)" data-add="addDB(value)"></card-view>
     </div>
 </div>

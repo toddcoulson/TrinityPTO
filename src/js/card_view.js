@@ -59,44 +59,50 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                         if (holiday[i] <= cpEnd)
                             n_days = n_days - 1; // day holiday within dates
                 }
+                
                 while (cpStart <= cpEnd) {
+                    
                     if (cpStart.getUTCDay() != 0 && cpStart.getUTCDay() != 6) n_days = n_days + 1; // not sunday
                     cpStart.setUTCHours(24); // add a day
                 }
 
-
-
-                if(n_days>2){
-                    n_days = n_days -2;
-                    n_hours = n_days * 8;
-                }
+                console.log("days: "+n_days)
+                
                 if(n_days > 1){
 
                     var eod = new Date(cpStartTime);
-                    eod.setHours(17, 0, 0);
+                    eod.setHours(17, 30, 0);
 
                     var startHours = eod - cpStartTime;
-                    n_hours += ((startHours/1000)/60)/60;
+                    startHours = ((startHours/1000)/60)/60;
+                    n_hours += startHours;
 
 
                     var bod = new Date(cpEndTime);
-                    bod.setHours(9, 0, 0);
+                    bod.setHours(8, 30, 0);
                     var endHours = cpEndTime-bod;
-                    n_hours += ((endHours/1000)/60)/60;
+                    endHours = ((endHours/1000)/60)/60;
+                    n_hours += endHours;
 
-                }else if(n_days == 1){
-
-                    var giveHours = cpEndTime - cpStartTime;
-                    n_hours += ((giveHours/1000)/60)/60;
+                }else{
+                    console.log(cpEndTime - cpStartTime)
+                    console.log(cpEndTime, cpStartTime)
+                    var giveHours = cpEndTime.getHours() - cpStartTime.getHours();
+                    giveHours += (cpEndTime.getMinutes()/60);
+                    giveHours -= (cpStartTime.getMinutes()/60);
+                    n_hours += giveHours;
                 }
+                if(n_days>2){
+                    n_days = n_days -2;
+                    n_hours += n_days * 8;
+                }
+                
                 $scope.n_hours = n_hours;
                 return n_hours;
             }
 
 
             $scope.changeTime = function(){
-                console.log("start",$scope.times.startTime.getHours())
-                console.log("end",$scope.times.endTime.getHours())
                 if($scope.times.startTime.getHours() > 17){
                     $scope.times.startTime = new Date(1970, 0, 1, 17, 00, 0);
 
@@ -108,10 +114,9 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                     $scope.times.startTime = new Date(1970, 0, 1, 8, 00, 0);
                 }
                 if($scope.times.endTime.getHours() < 8){
-                    $scope.times.startTime = new Date(1970, 0, 1, 8, 00, 0);
+                    $scope.times.endTime = new Date(1970, 0, 1, 8, 00, 0);
                 }
                 $scope.determineDays($scope.dates.dt1, $scope.dates.dt2, $scope.times.startTime, $scope.times.endTime);
-                console.log($scope.n_hours)
                 if($scope.n_hours < 0 ){
                     $scope.times.endTime = $scope.times.startTime;
                 }
@@ -190,7 +195,6 @@ angular.module('ptoApp').directive('cardView', ["$filter", function ($filter) {
                 $scope.dates.dt2 = new Date($scope.cardobj.endDateTime);
                 $scope.times.startTime = new Date($scope.cardobj.startDateTime);
                 $scope.times.endTime = new Date($scope.cardobj.endDateTime);
-                console.log(document.getElementById('selectTimeOffGroup'))
                 document.getElementById('selectTimeOffGroup').value=$scope.cardobj.timeOffGroup;
                 if($scope.cardobj.cardState == "review"){
                     $scope.cardobj.cardState = "reviewedit";

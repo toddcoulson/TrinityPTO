@@ -18,13 +18,11 @@
         </div>
         <div class="card-block">
             <div class="row">
-                <div class="col-sm-3">
-
-                </div>
-                <div class="col-sm-3" >
-
-                </div>
                 <div class="col-sm-6">
+                    <p class="card-text textValueCard">{{cardobj.requestedBy}}</p>
+                </div>
+                
+                <div class="col-sm-6" ng-show="cardobj.timeState !='pending'">
                     <p class="card-text textValueCard pull-right">{{cardobj.requestedBy}}</p>
                 </div>
                 <!--ng-show="!cardobj.cardState.includes('edit') && cardobj.cardState !== 'add'"
@@ -41,9 +39,7 @@
                     <p class="card-text textValueCard comment">{{cardobj.timeDuration}}</p>
                 </div>
 
-                <div class="col-sm-6" ng-show="cardobj.timeState !='pending'">
-                    <p class="card-text textValueCard pull-right">{{cardobj.requestedBy}}</p>
-                </div>
+                
             </div>
 
             <div class="row">

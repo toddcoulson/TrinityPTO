@@ -2,34 +2,37 @@
 <div class="sectionTable">
     <div class="row">
         <div class="col-sm-12 text-right">
-            <a href="#" type="submit" class="commonIconBtn" ng-click="hideSession()">
-                <i class="fa fa-eye" aria-hidden="true"></i>
+            <a href="" type="submit" class="commonIconBtn" ng-click="hideSession()">
+                <i ng-show="!displaySection" class="fa fa-eye" aria-hidden="true"></i>
+                <i ng-show="displaySection" class="fa fa-eye-slash" aria-hidden="true"></i>
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <p class="card-text textLabelCard">{{loggedIn.firstName}} {{loggedIn.lastName}}</p>
+    <div ng-show="displaySection">
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="card-text textLabelCard">{{loggedIn.firstName}} {{loggedIn.lastName}}</p>
+            </div>
+            <div class="col-sm-6">
+                <p class="card-text textValueCard pull-right">{{$root.employee.timePending}} pending hrs / {{$root.employee.totalTimeUsed}} used hrs / {{$root.employee.totalTimeAccrued}} available hrs</p>
+            </div>
+            {{$rootScope.employee}}
         </div>
-        <div class="col-sm-6">
-            <p class="card-text textValueCard pull-right">{{$root.employee.timePending}} pending hrs / {{$root.employee.totalTimeUsed}} used hrs / {{$root.employee.totalTimeAccrued}} available hrs</p>
-        </div>
-        {{$rootScope.employee}}
-    </div>
-    <div class="row">
+        <div class="row">
 
 
-        <div class="col-sm-6">
-            <p class="card-text textLabelCard">{{loggedIn.employeeType}}</p>
-        </div>
-        <div class="col-sm-6">
-            <p class="card-text textValueCard pull-right">{{loggedIn.employeeid}}</p>
-        </div>
+            <div class="col-sm-6">
+                <p class="card-text textLabelCard">{{loggedIn.employeeType}}</p>
+            </div>
+            <div class="col-sm-6">
+                <p class="card-text textValueCard pull-right">{{loggedIn.employeeid}}</p>
+            </div>
 
+        </div>
     </div>
 </div>
 <div class="progressBar">
-        
-        <div class="available"></div>
-        <div class="used"  ng-style="{'width':getPercentUsed()+'%'}"></div>
-    </div>
+
+    <div class="available"></div>
+    <div class="used"  ng-style="{'width':getPercentUsed()+'%'}"></div>
+</div>

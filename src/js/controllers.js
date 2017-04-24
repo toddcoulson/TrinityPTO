@@ -4,7 +4,7 @@
 
 angular.module('ptoApp')
     .controller('InfoController', ['$scope', '$state','$rootScope', 'employeeTestFactory', function ($scope, $state, $rootScope, employeeTestFactory) {
-        $scope.loggedIn = {};
+        $scope.loggedIn = {}; 
         $scope.displaySection = true;
         $rootScope.callInfo=function(){
             employeeTestFactory.get($rootScope.email).then(function(result) {

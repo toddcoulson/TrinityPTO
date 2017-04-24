@@ -16,9 +16,26 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       './bower_components/angular/angular.js',
+      './bower_components/angular-resource/angular-resource.js',
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './node_modules/angular-mocks/angular-mocks.js',
-     './src/js/app.js','./src/js/services.js', './src/tests/services.spec.js'
+/*
+      './bower_components/angular-ui-router/release/angular-ui-router.min.js',
+      './bower_components/angular-ui/build/angular-ui.js',
+      './bower_components/angular-resource/angular-resource.min.js',
+      './bower_components/bootstrap/dist/js/bootstrap.min.js',
+      './bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+      './bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      './bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
+
+*/
+
+
+      './src/js/app.js',
+      './src/js/services.js', 
+      './src/tests/services.spec.js',
+      './src/js/controllers.js'
     ],
 
 

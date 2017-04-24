@@ -1,5 +1,3 @@
-
-
 describe('Approver Properties factory add Requests', function() {
   var approverProperties;
 

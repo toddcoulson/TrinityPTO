@@ -1,11 +1,14 @@
-'use strict';
+(function () {
+
+  'use strict';
+
 
 angular.module('ptoApp', [])
     .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLEmployeeType", "https://313eil8vh4.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLTimeOffGroup", "https://pwqlomgq89.execute-api.us-east-1.amazonaws.com/dev/")
-    //.constant("baseURLTimeType", "https://jq2npw66ai.execute-api.us-east-1.amazonaws.com/dev/")
+//.constant("baseURLTimeType", "https://jq2npw66ai.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLTimeState", "https://hmmoye191c.execute-api.us-east-1.amazonaws.com/dev/")
 
     .factory('employeeFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {
@@ -65,7 +68,7 @@ angular.module('ptoApp', [])
     }])
 
 
-    /*.factory('timeTypeFactory', ['$resource', 'baseURLTimeType', function ($resource, baseURLTimeType) {
+/*.factory('timeTypeFactory', ['$resource', 'baseURLTimeType', function ($resource, baseURLTimeType) {
         return $resource(baseURLTimeType + "timetype/:timetypeid", {timetypeid:"@timetypeid"}, {
             'get':    {method:'GET'},
             'save':   {method:'POST'},
@@ -76,7 +79,7 @@ angular.module('ptoApp', [])
         });
     }])*/
 
-.factory('timeStateFactory', ['$resource', 'baseURLTimeState', function ($resource, baseURLTimeState) {
+    .factory('timeStateFactory', ['$resource', 'baseURLTimeState', function ($resource, baseURLTimeState) {
         return $resource(baseURLTimeState + "timestate/:timestateid", {timestateid:"@timestateid"}, {
             'get':    {method:'GET'},
             'save':   {method:'POST'},
@@ -86,33 +89,34 @@ angular.module('ptoApp', [])
             'update': {method:'PUT'}
         });
     }])
-
+ 
     .service('approverProperties', [ '$rootScope', function ($rootScope) {
-    var employeeSelect = 'none';
-    var updateItem = false;
-    var requests = [];
-    return {
-        getRequests: function () {
-            return requests;
-        },
-        setRequests: function(value) {
-            requests = value;
-            $rootScope.$broadcast('requests:updated',requests);
-        },
-        getEmployeeSelect: function () {
-            return employeeSelect;
-        },
-        setEmployeeSelect: function(value) {
-            employeeSelect = value;
-            $rootScope.$broadcast('select:updated',employeeSelect);
-        },
-        
-        getUpdateItem: function () {
-            return updateItem;
-        },
-        setUpdateItem: function(value) {
-            updateItem = value;
-            $rootScope.$broadcast('select:approvals',updateItem);
-        }
-    };
-}]);
+        var employeeSelect = 'none';
+        var updateItem = false;
+        var requests = [];
+        return {
+            getRequests: function () {
+                return requests;
+            },
+            setRequests: function(value) {
+                requests = value;
+                $rootScope.$broadcast('requests:updated',requests);
+            },
+            getEmployeeSelect: function () {
+                return employeeSelect;
+            },
+            setEmployeeSelect: function(value) {
+                employeeSelect = value;
+                $rootScope.$broadcast('select:updated',employeeSelect);
+            },
+
+            getUpdateItem: function () {
+                return updateItem;
+            },
+            setUpdateItem: function(value) {
+                updateItem = value;
+                $rootScope.$broadcast('select:approvals',updateItem);
+            }
+        };
+    }])
+})();

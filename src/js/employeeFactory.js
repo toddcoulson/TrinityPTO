@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ptoApp')
+angular.module('ptoApp.employeeTestFactory')
     .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
 
     .factory('employeeTestFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {
@@ -19,6 +19,9 @@ angular.module('ptoApp')
                     });
                 }
                 return promise;
+            },
+            findByName: function(data){
+                return data;
             }
         };
     }]);

@@ -2,7 +2,7 @@
 
 'use strict';
 
-angular.module('ptoApp')
+angular.module('ptoApp.controller')
     .controller('InfoController', ['$scope', '$state','$rootScope', 'employeeTestFactory', function ($scope, $state, $rootScope, employeeTestFactory) {
         $scope.loggedIn = {}; 
         $scope.displaySection = true;

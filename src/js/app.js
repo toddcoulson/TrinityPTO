@@ -1,4 +1,4 @@
-angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker.module', 'googleplus'])
+angular.module('ptoApp', ['ptoApp.services', 'ptoApp.controller', 'ptoApp.employeeTestFactory', 'ui.router','ngResource', 'ui.bootstrap', 'colorpicker.module', 'googleplus'])
     .config(['GooglePlusProvider', function(GooglePlusProvider) {
         GooglePlusProvider.init({
             clientId: '977491754644-954b83j2evmq65v6kchq4dsd9j0ud4vg.apps.googleusercontent.com',
@@ -148,3 +148,7 @@ angular.module('ptoApp', ['ui.router','ngResource', 'ui.bootstrap', 'colorpicker
 
         $urlRouterProvider.otherwise('/');
     }]);
+
+angular.module('ptoApp.services', []);
+angular.module('ptoApp.controller', []);
+angular.module('ptoApp.employeeTestFactory', []);

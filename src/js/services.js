@@ -3,7 +3,7 @@
   'use strict';
 
 
-angular.module('ptoApp', [])
+angular.module('ptoApp.services')
     .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLEmployeeType", "https://313eil8vh4.execute-api.us-east-1.amazonaws.com/dev/")
     .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")
@@ -18,10 +18,10 @@ angular.module('ptoApp', [])
             'save':   {method:'POST'},
             'query':  {method:'GET', isArray:true},
             'remove': {method:'DELETE'},
-            'delete': {method:'DELETE'},
-            'update': {method:'PUT'}
-        });
-
+            'delete': {method:'DELETE'}, 
+            'update': {method:'PUT'} 
+        }); 
+ 
     }])
     .factory('employeeTypeFactory', ['$resource', 'baseURLEmployeeType', function ($resource, baseURLEmployeeType) {
         return $resource(baseURLEmployeeType + "employeetype/:employeetypeid", {employeetypeid:"@employeetypeid"}, {

@@ -48,7 +48,7 @@
                 "cloudformation:DescribeStacks"
             ],
             "Resource":[
-                "arn:aws:cloudformation:us-east-1:635337925294:stack/employees-dev/*"
+                "arn:aws:cloudformation:us-east-1:635337925294:stack/employeeType-dev/*"
             ]
         },
         {
@@ -67,8 +67,8 @@
                 "s3:GetBucketLocation"
             ],
             "Resource":[
-                "arn:aws:s3:::employees-dev-*/*",
-                "arn:aws:s3:::employees-dev-*"
+                "arn:aws:s3:::employeeType-dev-*/*",
+                "arn:aws:s3:::employeeType-dev-*"
             ]
         },
         {
@@ -85,7 +85,7 @@
                 "lambda:ListVersionsByFunction"
             ],
             "Resource":[
-                "arn:aws:lambda:us-east-1:635337925294:function:employees-dev-*"
+                "arn:aws:lambda:us-east-1:635337925294:function:employeeType-dev-*"
             ]
         },
         {
@@ -99,7 +99,7 @@
                 "iam:PutRolePolicy"
             ],
             "Resource":[
-                "arn:aws:iam::635337925294:role/employees-dev-us-east-1-lambdaRole"
+                "arn:aws:iam::635337925294:role/employeeType-dev-us-east-1-lambdaRole"
             ]
         },
         {

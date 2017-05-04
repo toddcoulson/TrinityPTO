@@ -2,6 +2,40 @@
     "Version":"2012-10-17",
     "Statement":[
         {
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams",
+                "logs:DescribeLogGroups",
+                "logs:FilterLogEvents"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:CreateTable"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-1:*:*",
+            "Effect": "Allow"
+        },
+        
+        {
             "Effect":"Allow",
             "Action":[
                 "cloudformation:CreateStack",
@@ -14,7 +48,7 @@
                 "cloudformation:DescribeStacks"
             ],
             "Resource":[
-                "arn:aws:cloudformation:us-east-1:635337925294:stack/employeesTypeTest-dev/*"
+                "arn:aws:cloudformation:us-east-1:847326009474:stack/timeState-dev/*"
             ]
         },
         {
@@ -33,8 +67,8 @@
                 "s3:GetBucketLocation"
             ],
             "Resource":[
-                "arn:aws:s3:::employeesTypeTest-dev-*/*",
-                "arn:aws:s3:::employeesTypeTest-dev-*"
+                "arn:aws:s3:::timeState-dev-*/*",
+                "arn:aws:s3:::timeState-dev-*"
             ]
         },
         {
@@ -51,7 +85,7 @@
                 "lambda:ListVersionsByFunction"
             ],
             "Resource":[
-                "arn:aws:lambda:us-east-1:635337925294:function:employeesTypeTest-dev-*"
+                "arn:aws:lambda:us-east-1:847326009474:function:timeState-dev-*"
             ]
         },
         {
@@ -65,7 +99,7 @@
                 "iam:PutRolePolicy"
             ],
             "Resource":[
-                "arn:aws:iam::635337925294:role/employeesTypeTest-dev-us-east-1-lambdaRole"
+                "arn:aws:iam::847326009474:role/timeState-dev-us-east-1-lambdaRole"
             ]
         },
         {
@@ -75,6 +109,18 @@
                 "logs:FilterLogEvents"
             ],
             "Resource":[
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:GET",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:DELETE"
+            ],
+            "Resource": [
                 "*"
             ]
         },

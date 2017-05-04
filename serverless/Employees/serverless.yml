@@ -1,4 +1,4 @@
-service: employeesNew
+service: employees
 
 provider:
   name: aws

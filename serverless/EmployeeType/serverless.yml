@@ -1,5 +1,5 @@
 
-service: employeeTypeTest
+service: employeeType
 
 provider:
   name: aws

@@ -5,13 +5,14 @@ describe('Controllers', function() {
   // Load ui.router and our components.users module which we'll create next
 
   beforeEach(module('ui.router'));
+  beforeEach(angular.mock.module('ptoApp.services'));
   beforeEach(angular.mock.module('ptoApp.controller'));
   beforeEach(angular.mock.module('ptoApp.employeeTestFactory'));
   beforeEach(module('ngResource'));
   
   //'$scope', '$rootScope', '$state','$window', '$location','employeeFactory', 'employeeTestFactory'
 
-  beforeEach(inject(function($controller, _$rootScope_, _$location_, _$window_, _employeeTestFactory_, _$httpBackend_, _$state_) {
+  beforeEach(inject(function($controller, _$rootScope_, _$location_, _$window_, _employeeTestFactory_, _$httpBackend_, _$state_, _employeeFactory_) {
     scopeIC = _$rootScope_.$new();
     scopeCC = _$rootScope_.$new();
     $rootScope = _$rootScope_;
@@ -22,11 +23,12 @@ describe('Controllers', function() {
       employeeTestFactory:_employeeTestFactory_,
       $state: {}
     });
-    ContainerController = $controller('InfoController', {
+    ContainerController = $controller('ContainerController', {
       $scope: scopeCC,
       $location: _$location_,
       $window: _$window_,
       $rootScope: $rootScope,
+      employeeFactory: _employeeFactory_,
       employeeTestFactory:_employeeTestFactory_,
       $state:_$state_
     });
@@ -64,7 +66,6 @@ describe('Controllers', function() {
   });
   
   it('ContainerController should test calculateUsed on rootscope', function() {
-    expect(ContainerController).toBeDefined();
     $rootScope.employee = {
       "employeeid": "tcoulson@gmail.com",
       "firstName": "Todd",
@@ -73,6 +74,7 @@ describe('Controllers', function() {
       "totalTimeUsed": 0,
       "totalTimeAccrued": 40
     }
+    var noReq = [];
     var singleReq = [{"requestedBy": "Todd",
         "approvedBy": "Tom",
         "status": "approved",
@@ -88,85 +90,7 @@ describe('Controllers', function() {
     
     $rootScope.calculateUsed(singleReq);
     expect($rootScope.employee.totalTimeUsed).toBe(32);
+    $rootScope.calculateUsed(noReq);
+    expect($rootScope.employee.totalTimeUsed).toBe(0);
   });
-
-
 });
-
-/*
-describe('Employee factory', function() {
-  var Employee, $q, $httpBackend;
-
-  // Add Pokeapi endpoint
-  var API = 'https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/Employee/';
-
-  // Add mocked Pokéapi response
-  var RESPONSE_SUCCESS = {
-    'id': 'tcoulson@gmail.com',
-    'firstName': 'Todd',
-    'lastName': 'Coulson'
-  };
-
-  beforeEach(angular.mock.module('ptoApp.employeeTestFactory'));
-  beforeEach(module('ngResource'));
-
-  // Inject $q and $httpBackend for testing HTTP requests
-  beforeEach(inject(function(_employeeTestFactory_, _$q_, _$httpBackend_) {
-    Employee = _employeeTestFactory_;
-    $q = _$q_;
-    $httpBackend = _$httpBackend_;
-  }));
-
-  it('should exist', function() {
-    expect(Employee).toBeDefined();
-  });
-
-  describe('findByName()', function() {
-    var result;
-
-    beforeEach(function() {
-      result = {};
-      spyOn(Employee, "findByName").and.callThrough();
-    });
-
-    it('should return a Employee when called with a valid name', function() {
-      var search = 'todd';
-      $httpBackend.whenGET(API + search).respond(200, $q.when(RESPONSE_SUCCESS));
-
-      expect(Employee.findByName).not.toHaveBeenCalled();
-      expect(result).toEqual({});
-
-      Employee.findByName(search)
-      .then(function(res) {
-        result = res;
-      });
-      $httpBackend.flush();
-
-      expect(Employee.findByName).toHaveBeenCalledWith(search);
-      expect(result.firstName).toEqual('Todd');
-      expect(result.lastName).toContain('Coul');
-      expect(result.id).toEqual('tcoulson@gmail.com');
-    });
-
-    it('should return a 404 when called with an invalid name', function() {
-      // Update search term
-      var search = 'godzilla';
-
-      // Update status code and response object (reject instead of when/resolve)
-      $httpBackend.whenGET(API + search).respond(404, $q.reject(RESPONSE_ERROR));
-
-      expect(Employee.findByName).not.toHaveBeenCalled();
-      expect(result).toEqual({});
-
-      // Update chained method to catch
-      Employee.findByName(search)
-      .catch(function(res) {
-        result = res;
-      });
-      $httpBackend.flush();
-
-      expect(Employee.findByName).toHaveBeenCalledWith(search);
-      expect(result.detail).toEqual('Not found.');
-    });
-  });
-});*/

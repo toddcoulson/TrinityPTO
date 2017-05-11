@@ -7,20 +7,26 @@
     //https://n6l0eglcu8.execute-api.us-east-1.amazonaws.com/dev/employee
     //https://zd0tb3j230.execute-api.us-east-1.amazonaws.com/dev/timestate
 
+    
+    
     angular.module('ptoApp.services')
+    //Todd's Version
+    //******* 
         .constant("baseURLEmployee", "https://tbgspm8rvi.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLEmployeeType", "https://313eil8vh4.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLTimeOffGroup", "https://pwqlomgq89.execute-api.us-east-1.amazonaws.com/dev/")
     //.constant("baseURLTimeType", "https://jq2npw66ai.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLTimeState", "https://hmmoye191c.execute-api.us-east-1.amazonaws.com/dev/")
-
-    //Work AWS constants
-        /*.constant("baseURLEmployee", "https://n6l0eglcu8.execute-api.us-east-1.amazonaws.com/dev/")
+//*********/
+    //Trinity IT AWS constants
+        /* 
+        .constant("baseURLEmployee", "https://n6l0eglcu8.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLEmployeeType", "https://xspyiflx34.execute-api.us-east-1.amazonaws.com/dev/employeetype")
         .constant("baseURLRequest", "https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLTimeOffGroup", "https://ah8jxcqn7i.execute-api.us-east-1.amazonaws.com/dev/timeoffgroup")
-        .constant("baseURLTimeState", "https://zd0tb3j230.execute-api.us-east-1.amazonaws.com/dev/")*/
+        .constant("baseURLTimeState", "https://zd0tb3j230.execute-api.us-east-1.amazonaws.com/dev/")
+        //*/
         .factory('employeeFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {
 
             return $resource(baseURLEmployee + "employee/:employeeid", {employeeid:"@employeeid"}, {

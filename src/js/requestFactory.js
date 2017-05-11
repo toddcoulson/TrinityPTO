@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ptoApp')
-    .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")
+    .constant("baseURLRequest", "https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/")
     .factory('requestTestFactory', ['$resource', 'baseURLRequest', function ($resource, baseURLRequest) {
         // $resource definition here
         var resource = $resource(baseURLRequest + "request/:requestid", {requestid:"@requestid"}, {

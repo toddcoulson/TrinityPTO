@@ -149,6 +149,6 @@ angular.module('ptoApp', ['ptoApp.services', 'ptoApp.controller', 'ptoApp.employ
         $urlRouterProvider.otherwise('/');
     }]);
 
-angular.module('ptoApp.services', []);
+angular.module('ptoApp.services', ['ngResource']);
 angular.module('ptoApp.controller', []);
 angular.module('ptoApp.employeeTestFactory', []);

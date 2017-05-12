@@ -1,13 +1,6 @@
 (function () {
 
-    'use strict';
-    //https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/request
-    //https://ah8jxcqn7i.execute-api.us-east-1.amazonaws.com/dev/timeoffgroup
-    //https://xspyiflx34.execute-api.us-east-1.amazonaws.com/dev/employeetype
-    //https://n6l0eglcu8.execute-api.us-east-1.amazonaws.com/dev/employee
-    //https://zd0tb3j230.execute-api.us-east-1.amazonaws.com/dev/timestate
-
-    
+    'use strict';    
     
     angular.module('ptoApp.services')
     //Todd's Version
@@ -22,9 +15,9 @@
     //Trinity IT AWS constants
         /* 
         .constant("baseURLEmployee", "https://n6l0eglcu8.execute-api.us-east-1.amazonaws.com/dev/")
-        .constant("baseURLEmployeeType", "https://xspyiflx34.execute-api.us-east-1.amazonaws.com/dev/employeetype")
+        .constant("baseURLEmployeeType", "https://xspyiflx34.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLRequest", "https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/")
-        .constant("baseURLTimeOffGroup", "https://ah8jxcqn7i.execute-api.us-east-1.amazonaws.com/dev/timeoffgroup")
+        .constant("baseURLTimeOffGroup", "https://ah8jxcqn7i.execute-api.us-east-1.amazonaws.com/dev/")
         .constant("baseURLTimeState", "https://zd0tb3j230.execute-api.us-east-1.amazonaws.com/dev/")
         //*/
         .factory('employeeFactory', ['$resource', 'baseURLEmployee', function ($resource, baseURLEmployee) {

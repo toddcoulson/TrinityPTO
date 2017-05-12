@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('ptoApp')
-    .constant("baseURLRequest", "https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/")
+//.constant("baseURLRequest", "https://1919b06afk.execute-api.us-east-1.amazonaws.com/dev/")//trin
+    .constant("baseURLRequest", "https://wou53nmy62.execute-api.us-east-1.amazonaws.com/dev/")//tc
     .factory('requestTestFactory', ['$resource', 'baseURLRequest', function ($resource, baseURLRequest) {
         // $resource definition here
         var resource = $resource(baseURLRequest + "request/:requestid", {requestid:"@requestid"}, {
@@ -69,7 +70,7 @@ angular.module('ptoApp')
                                                                            "timeState":obj.timeState,
                                                                            "timeType":obj.timeType,
                                                                            "timeOffGroup":obj.timeOffGroup}).$promise.then(function(result) {
-                        
+
                         return result;
                     });
                 }

@@ -1,0 +1,170 @@
+as you generally want to always query by an index, otherwise you are just doing a scan and filter, which is very expensive
+Todd Coulson
+@toddcoulson
+10:30
+@jatsrt Is a GSI the only way to combine two tables?
+Jake Thompson
+@jatsrt
+10:30
+np
+no
+but maybe :grinning:
+so there is no such thing as a join and no table knows of any other table
+Andrew Curioso
+@andrewcurioso
+10:31
+@toddcoulson GSIs do not need to be created at table creation. They can be created at any time
+Jake Thompson
+@jatsrt
+10:31
+is this a many to many or a one to many relationship
+^ and that
+Todd Coulson
+@toddcoulson
+10:31
+@andrewcurioso good to know
+@jatsrt one to many
+one employee - many requests
+Jake Thompson
+@jatsrt
+10:32
+OK, so one employee has many request, but one request is only owned by one employee
+Todd Coulson
+@toddcoulson
+10:32
+yes
+Jake Thompson
+@jatsrt
+10:32
+so, I would have an employee table
+and a request table
+the employee table has a hash key of “id"
+whatever that is for you, UUID, email, etc
+Todd Coulson
+@toddcoulson
+10:33
+yep, email
+Jake Thompson
+@jatsrt
+10:33
+I would have a request table, with HASH key of “employee_id” and a sort key of “request ID"
+unless…..
+you at times only know the request ID and not the employee it is associated with
+then to get requests for an employee it is a simple query on hash key = employee ID
+Todd Coulson
+@toddcoulson
+10:34
+no i have a requestedBy field on request table that is for the employee making the request, it holds the email
+Jake Thompson
+@jatsrt
+10:34
+or if you need a specific record, query employee id and request id
+sure, so the other way to do it
+request table has a hash key, “request_id"
+and you create a secondary on it keyed off of the “requestedBy"
+then you can query it either way
+Todd Coulson
+@toddcoulson
+10:36
+hmm ok, that helps a lot
+when you say secondary keyed off requestedBy you mean a global secondary index?
+Jake Thompson
+@jatsrt
+10:36
+yes
+
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: userEmail
+            AttributeType: S
+          - AttributeName: brokerEmail
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userEmail
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: "BrokerHash"
+            KeySchema:
+              - AttributeName: brokerEmail
+                KeyType: HASH
+              - AttributeName: userEmail
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.readCapacity}
+              WriteCapacityUnits: ${self:custom.writeCapacity}
+        ProvisionedThroughput: 
+          ReadCapacityUnits: ${self:custom.readCapacity}
+          WriteCapacityUnits: ${self:custom.writeCapacity}
+
+here is an example, from my services
+A broker(real estate agent) can sponsor many consumers
+Todd Coulson
+@toddcoulson
+10:37
+excellent, thanks for the example
+Jake Thompson
+@jatsrt
+10:38
+most the time I am querying this to get a consumers sponsorship, but sometimes I want to query to get all of a brokers sponsorships
+so the global secondary groups by broker instead
+when you query, just set the index you are using
+Vaidas Mykolaitis
+@codepreneur
+10:38
+@andrewcurioso absorbing AWS ecosystem with you on this channel is a piece of cake, better than google
+besides the cool thing about serverless/aws is taht you dont need to know the whole ecosystem to start being productive
+if I ask someone to build some lambda that only requires s3 and dynamodb
+thats all they need to learn/know
+Andrew Curioso
+@andrewcurioso
+10:39
+@codepreneur Yeah, if you’re not carefully you can spend the whole day reading this chat and never get any work done :wink:
+Vaidas Mykolaitis
+@codepreneur
+10:39
+and I love dynamoDB too :smiley:
+Todd Coulson
+@toddcoulson
+10:39
+@jatsrt thanks so much
+JustSteveKing
+@JustSteveKing
+10:39
+Maybe I should make the switch :smiley: I am going to be in charge of hiring and firing in my new role, so would be good to have a set standard
+Jake Thompson
+@jatsrt
+10:39
+^ that is the biggest thing, don’t try to understand all of AWS, if you need to run a function, learn lambda, if you want it to be a REST endpoint, learn APIG, if you need some data stored, learn dynamo
+So, the initial reaction most people have coming from MYSQL(or others) to Dynamo is , this is slow, I can’t query, etc
+if you clearly model your data, you can possibly get away from complex querying and almost alywas just get it based on an index/key
+Personally I have an platform that is crazy complex querying, and I still love dynamo
+because….
+Elasticsearch is a better query engine for me anyway :grinning:
+Todd Coulson
+@toddcoulson
+10:41
+@jatsrt what is an example query you would write on your broker example?
+Andrew Curioso
+@andrewcurioso
+10:42
+DynamoDB is actually very restrictive compaired to other noSQL databases like MongoDB, Redis, and ElesticSerach (those last two you can easily run “Serverless” on AWS). But once you learn the restrictions it is incredibly efficient
+(not just restrictive compaired to SQL)
+Todd Coulson
+@toddcoulson
+10:42
+@andrewcurioso very interesting
+Andrew Curioso
+@andrewcurioso
+10:43
+It is actually the most restrictive noSQL database I have ever used :stuck_out_tongue: but I keep using it because managing, maintaining, and scaling it is painless and problem free
+Jake Thompson
+@jatsrt
+10:43
+lets see,
+documentClient.scan({TableName: “”) -> get all subscriptions
+documentClient.query({TableName: “”, IndexName: “BrokerHash”, Key: {brokerEmail: “”}})
+documentClient.get({TableName: “, key:””}}
+sorry doing this off the top of my head here
